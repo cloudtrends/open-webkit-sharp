@@ -1,0 +1,63 @@
+﻿Build started 19/2/2012 7:28:10 μμ.
+     1>Project "C:\OpenWebKitSharp\JavaScript\JSCore.vcxproj" on node 2 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\OpenWebKitSharp\JavaScript\bin\Release\".
+       InitializeBuildStatus:
+         Creating "Release\JSCore.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenWebKitSharp\JavaScript\include /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\JSCore.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /FUC:\OpenWebKitSharp\Source\generated\WebKit.Interop.dll /analyze- /errorReport:prompt Stdafx.cpp /clr:nostdlib 
+         Stdafx.cpp
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenWebKitSharp\JavaScript\include /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\JSCore.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /FUC:\OpenWebKitSharp\Source\generated\WebKit.Interop.dll /analyze- /errorReport:prompt AssemblyInfo.cpp JSContext.cpp JSCore.cpp JSCoreMarshal.cpp JSCoreObjectWrapper.cpp JSObject.cpp JSValue.cpp /clr:nostdlib 
+         AssemblyInfo.cpp
+         JSContext.cpp
+         JSCore.cpp
+         JSCoreMarshal.cpp
+         JSCoreObjectWrapper.cpp
+         JSObject.cpp
+         JSValue.cpp
+         Generating Code...
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenWebKitSharp\JavaScript\include /Zi /clr /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /TP /analyze- /errorReport:prompt "C:\Users\User\AppData\Local\Temp\.NETFramework,Version=v4.0.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+       Link:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\OpenWebKitSharp\JavaScript\bin\Release\JSCore.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\OpenWebKitSharp\JavaScript\lib JavaScriptCore.lib /MANIFEST /ManifestFile:"Release\JSCore.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\OpenWebKitSharp\JavaScript\bin\Release\JSCore.pdb" /LTCG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /KEYFILE:"C:\OpenWebKitSharp\JavaScript\WebKit.NET.snk" /DELAYSIGN /DLL Release\AssemblyInfo.obj
+         Release\JSContext.obj
+         Release\JSCore.obj
+         Release\JSCoreMarshal.obj
+         Release\JSCoreObjectWrapper.obj
+         Release\JSObject.obj
+         Release\JSValue.obj
+         Release\Stdafx.obj
+         "Release\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSValue'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000014) for 'OpaqueJSValue'; image may not run
+     1>JSCoreMarshal.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSContext'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSContext'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000013) for 'OpaqueJSContext'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSContext'; image may not run
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000022) for 'OpaqueJSString'; image may not run
+     1>JSCoreMarshal.obj : warning LNK4248: unresolved typeref token (01000014) for 'OpaqueJSString'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000016) for 'OpaqueJSClass'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (0100002C) for 'OpaqueJSClass'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (0100001B) for 'OpaqueJSClass'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000023) for 'OpaqueJSPropertyNameAccumulator'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (0100002F) for 'OpaqueJSPropertyNameArray'; image may not run
+         JSCore.vcxproj -> C:\OpenWebKitSharp\JavaScript\bin\Release\JSCore.dll
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\OpenWebKitSharp\JavaScript\bin\Release\JSCore.dll;#2" /manifest Release\JSCore.dll.intermediate.manifest
+       _CopyFilesMarkedCopyLocal:
+         Copying file from "C:\OpenWebKitSharp\Source\generated\WebKit.Interop.dll" to "C:\OpenWebKitSharp\JavaScript\bin\Release\WebKit.Interop.dll".
+       FinalizeBuildStatus:
+         Deleting file "Release\JSCore.unsuccessfulbuild".
+         Touching "Release\JSCore.lastbuildstate".
+     1>Done Building Project "C:\OpenWebKitSharp\JavaScript\JSCore.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.87

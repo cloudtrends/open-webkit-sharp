@@ -1,0 +1,12 @@
+C:\OpenWebKitSharp\WebKit\JavaScriptExample.exe.config
+C:\OpenWebKitSharp\WebKit\JavaScriptExample.exe
+C:\OpenWebKitSharp\WebKit\JavaScriptExample.pdb
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.csprojResolveAssemblyReference.cache
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.Form1.resources
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.Properties.Resources.resources
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.csproj.GenerateResource.Cache
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.exe
+C:\OpenWebKitSharp\JavaScriptExample\obj\Release\JavaScriptExample.pdb
+C:\OpenWebKitSharp\build\JavaScriptExample.exe.config
+C:\OpenWebKitSharp\build\JavaScriptExample.exe
+C:\OpenWebKitSharp\build\JavaScriptExample.pdb

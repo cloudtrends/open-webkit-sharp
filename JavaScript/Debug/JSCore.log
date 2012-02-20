@@ -1,0 +1,59 @@
+﻿Build started 12/2/2012 2:57:02 μμ.
+     1>Project "C:\OpenWebKitSharp\JavaScript\JSCore.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\JSCore.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       ClCompile:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenWebKitSharp\JavaScript\include /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W0 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\JSCore.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /FUC:\OpenWebKitSharp\Source\generated\WebKit.Interop.dll /analyze- /errorReport:prompt Stdafx.cpp /clr:nostdlib 
+         Stdafx.cpp
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenWebKitSharp\JavaScript\include /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W0 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\JSCore.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /FUC:\OpenWebKitSharp\Source\generated\WebKit.Interop.dll /analyze- /errorReport:prompt AssemblyInfo.cpp JSContext.cpp JSCore.cpp JSCoreMarshal.cpp JSCoreObjectWrapper.cpp JSObject.cpp JSValue.cpp /clr:nostdlib 
+         AssemblyInfo.cpp
+         JSContext.cpp
+         JSCore.cpp
+         JSCoreMarshal.cpp
+         JSCoreObjectWrapper.cpp
+         JSObject.cpp
+         JSValue.cpp
+         Generating Code...
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\OpenWebKitSharp\JavaScript\bin\Debug\JSCore.dll" /INCREMENTAL /NOLOGO /LIBPATH:C:\OpenWebKitSharp\JavaScript\lib JavaScriptCore.lib /MANIFEST /ManifestFile:"Debug\JSCore.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\OpenWebKitSharp\JavaScript\bin\Debug\JSCore.pdb" /ASSEMBLYDEBUG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /KEYFILE:"C:\OpenWebKitSharp\JavaScript\WebKit.NET.snk" /DELAYSIGN /DLL Debug\AssemblyInfo.obj
+         Debug\JSContext.obj
+         Debug\JSCore.obj
+         Debug\JSCoreMarshal.obj
+         Debug\JSCoreObjectWrapper.obj
+         Debug\JSObject.obj
+         Debug\JSValue.obj
+         Debug\Stdafx.obj
+         "Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSValue'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000014) for 'OpaqueJSValue'; image may not run
+     1>JSCoreMarshal.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSValue'; image may not run
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (0100000D) for 'OpaqueJSContext'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSContext'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000013) for 'OpaqueJSContext'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (01000012) for 'OpaqueJSContext'; image may not run
+     1>JSValue.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000022) for 'OpaqueJSString'; image may not run
+     1>JSCoreMarshal.obj : warning LNK4248: unresolved typeref token (01000014) for 'OpaqueJSString'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (01000015) for 'OpaqueJSString'; image may not run
+     1>JSObject.obj : warning LNK4248: unresolved typeref token (01000016) for 'OpaqueJSClass'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (0100002C) for 'OpaqueJSClass'; image may not run
+     1>JSContext.obj : warning LNK4248: unresolved typeref token (0100001B) for 'OpaqueJSClass'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (01000023) for 'OpaqueJSPropertyNameAccumulator'; image may not run
+     1>JSCoreObjectWrapper.obj : warning LNK4248: unresolved typeref token (0100002F) for 'OpaqueJSPropertyNameArray'; image may not run
+         JSCore.vcxproj -> C:\OpenWebKitSharp\JavaScript\bin\Debug\JSCore.dll
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\OpenWebKitSharp\JavaScript\bin\Debug\JSCore.dll;#2" /manifest Debug\JSCore.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\JSCore.unsuccessfulbuild".
+         Touching "Debug\JSCore.lastbuildstate".
+     1>Done Building Project "C:\OpenWebKitSharp\JavaScript\JSCore.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.90

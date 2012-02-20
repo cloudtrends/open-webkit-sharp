@@ -1,0 +1,149 @@
+﻿Build started 19/2/2012 2:40:57 μμ.
+     1>Project "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.vcxproj" on node 2 (Build target(s)).
+         REM Do not edit from the Visual Studio IDE! Customize via a InterfacesPreBuild.cmd file.
+         if not exist "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPreBuild.cmd" exit /b
+         
+         set CONFIGURATIONBUILDDIR=C:\cygwin\home\George\webkit2\WebKitBuild\Release
+         set CONFIGURATIONNAME=Release
+         set INPUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set INPUTFILENAME=Interfaces
+         set INPUTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces
+         set INTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\obj\Interfaces\
+         set LIBRARYCONFIGSUFFIX=
+         set OUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\
+         set PLATFORMNAME=Win32
+         set PROJECTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set PROJECTFILENAME=Interfaces.vcxproj
+         set PROJECTNAME=Interfaces
+         set PROJECTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.vcxproj
+         set SOLUTIONDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set SOLUTIONFILENAME=Interfaces.sln
+         set SOLUTIONNAME=Interfaces
+         set SOLUTIONPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.sln
+         set TARGETDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\include\WebKit\
+         set TARGETEXT=.lib
+         set TARGETFILENAME=Interfaces.lib
+         set TARGETPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\Interfaces.lib
+         set WEBKITCONFIGSUFFIX=
+         set WEBKITDLLCONFIGSUFFIX=
+         
+         REM If any of the above variables didn't exist previously and
+         REM were set to an empty string, set will set the errorlevel to 1,
+         REM which will cause the project-specific script to think the build
+         REM has failed. This cmd /c call will clear the errorlevel.
+         cmd /c
+         
+         "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPreBuild.cmd"
+         
+         :VCEnd
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\midl.exe /IC:\cygwin\home\George\webkit2\WebKitBuild\Release\obj\WebKit\DerivedSources /I..\Interfaces /I"C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\obj\Interfaces\include" /W1 /WX /nologo /char signed /out"C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\" /h "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\WebKit.h" /tlb "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\WebKit.tlb" ..\Interfaces\WebKit.idl 
+         Processing ..\Interfaces\WebKit.idl
+         WebKit.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.idl
+         oaidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\objidl.idl
+         objidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\unknwn.idl
+         unknwn.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\wtypes.idl
+         wtypes.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\basetsd.h
+         basetsd.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\guiddef.h
+         guiddef.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.idl
+         ocidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oleidl.idl
+         oleidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\servprov.idl
+         servprov.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\urlmon.idl
+         urlmon.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\msxml.idl
+         msxml.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oleacc.idl
+         oleacc.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.acf
+         oaidl.acf
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.acf
+         ocidl.acf
+         REM Do not edit from the Visual Studio IDE! Customize via a InterfacesPreLink.cmd file.
+         if not exist "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPreLink.cmd" exit /b
+         
+         set CONFIGURATIONBUILDDIR=C:\cygwin\home\George\webkit2\WebKitBuild\Release
+         set CONFIGURATIONNAME=Release
+         set INPUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set INPUTFILENAME=Interfaces
+         set INPUTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces
+         set INTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\obj\Interfaces\
+         set LIBRARYCONFIGSUFFIX=
+         set OUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\
+         set PLATFORMNAME=Win32
+         set PROJECTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set PROJECTFILENAME=Interfaces.vcxproj
+         set PROJECTNAME=Interfaces
+         set PROJECTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.vcxproj
+         set SOLUTIONDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set SOLUTIONFILENAME=Interfaces.sln
+         set SOLUTIONNAME=Interfaces
+         set SOLUTIONPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.sln
+         set TARGETDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\include\WebKit\
+         set TARGETEXT=.lib
+         set TARGETFILENAME=Interfaces.lib
+         set TARGETPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\Interfaces.lib
+         set WEBKITCONFIGSUFFIX=
+         set WEBKITDLLCONFIGSUFFIX=
+         
+         REM If any of the above variables didn't exist previously and
+         REM were set to an empty string, set will set the errorlevel to 1,
+         REM which will cause the project-specific script to think the build
+         REM has failed. This cmd /c call will clear the errorlevel.
+         cmd /c
+         
+         "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPreLink.cmd"
+         
+         :VCEnd
+         REM Do not edit from the Visual Studio IDE! Customize via a InterfacesPostBuild.cmd file
+         if not exist "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPostBuild.cmd" exit /b
+         
+         set CONFIGURATIONBUILDDIR=C:\cygwin\home\George\webkit2\WebKitBuild\Release
+         set CONFIGURATIONNAME=Release
+         set INPUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set INPUTFILENAME=Interfaces
+         set INPUTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces
+         set INTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\obj\Interfaces\
+         set LIBRARYCONFIGSUFFIX=
+         set OUTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\
+         set PLATFORMNAME=Win32
+         set PROJECTDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set PROJECTFILENAME=Interfaces.vcxproj
+         set PROJECTNAME=Interfaces
+         set PROJECTPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.vcxproj
+         set SOLUTIONDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\
+         set SOLUTIONFILENAME=Interfaces.sln
+         set SOLUTIONNAME=Interfaces
+         set SOLUTIONPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.sln
+         set TARGETDIR=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\include\WebKit\
+         set TARGETEXT=.lib
+         set TARGETFILENAME=Interfaces.lib
+         set TARGETPATH=C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Release\\include\WebKit\Interfaces.lib
+         set WEBKITCONFIGSUFFIX=
+         set WEBKITDLLCONFIGSUFFIX=
+         
+         REM If any of the above variables didn't exist previously and
+         REM were set to an empty string, set will set the errorlevel to 1,
+         REM which will cause the project-specific script to think the build
+         REM has failed. This cmd /c call will clear the errorlevel.
+         cmd /c
+         
+         "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\InterfacesPostBuild.cmd"
+         
+         :VCEnd
+         Το σύστημα δεν είναι σε θέση να εντοπίσει την καθορισμένη διαδρομή δίσκου.
+         'perl' δεν αναγνωρίζεται ως εσωτερική ή εξωτερική εντολή,
+         εκτελέσιμο πρόγραμμα ή αρχείο δέσμης ενεργειών.
+     1>Done Building Project "C:\MyTemp\GTLite Navigator\bin\Release\GTLite Downloads\WebKit-r108077\WebKit-r108077\Source\WebKit\win\WebKit.vcproj\Interfaces.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.41
