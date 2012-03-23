@@ -9,7 +9,7 @@
     <StartProgram>C:\OpenWebKitSharp\build\Example.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_NET2|x86'">
-    <StartProgram>C:\OpenWebKitSharp\WebKit\JavaScriptExample.exe</StartProgram>
+    <StartProgram>C:\OpenWebKitSharp\build\Example.exe</StartProgram>
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_NET2|x86'">

@@ -65,7 +65,7 @@ namespace WebKit
 
         // private member variables...
         internal IWebView webView;
-        private IntPtr webViewHWND;
+        internal IntPtr webViewHWND;
 
         private bool disposed = false;
 
@@ -99,7 +99,7 @@ namespace WebKit
         internal WebNotificationObserver observer;
         internal WebNotificationCenter center;
         internal WebKitDOMCSSManager cssmanager;
-        internal WebEditingDelegate editingDelegate;
+        //internal WebEditingDelegate editingDelegate;
         internal ContextMenuManager contextmenumanager;
         internal WebResourceLoadDelegate resourcesLoadDelegate;
         internal ResourcesIntercepter resourceIntercepter;
@@ -922,9 +922,13 @@ namespace WebKit
 
                 webView = new WebViewClass();
 
+                contextmenumanager = new ContextMenuManager(this);
+                Marshal.AddRef(Marshal.GetIUnknownForObject(contextmenumanager));
+                
                 activationContext.Deactivate();
             }
         }
+
 
         internal string LastSelectedLink { get; set; }
 
@@ -950,9 +954,6 @@ namespace WebKit
             resourceIntercepter = new ResourcesIntercepter(this);
             Marshal.AddRef(Marshal.GetIUnknownForObject(resourceIntercepter));
 
-            contextmenumanager = new ContextMenuManager(this);
-            Marshal.AddRef(Marshal.GetIUnknownForObject(contextmenumanager));
-
             frameLoadDelegate = new WebFrameLoadDelegate();
             Marshal.AddRef(Marshal.GetIUnknownForObject(frameLoadDelegate));
             
@@ -965,9 +966,9 @@ namespace WebKit
             resourcesLoadDelegate = new WebResourceLoadDelegate();
             Marshal.AddRef(Marshal.GetIUnknownForObject(resourcesLoadDelegate));
             
-            editingDelegate = new WebEditingDelegate(this);
-            Marshal.AddRef(Marshal.GetIUnknownForObject(editingDelegate));
-
+            //editingDelegate = new WebEditingDelegate(this);
+            //Marshal.AddRef(Marshal.GetIUnknownForObject(editingDelegate));
+            // not used (yet)
             policyDelegate = new WebPolicyDelegate(AllowNavigation, AllowDownloads, AllowNewWindows);
             Marshal.AddRef(Marshal.GetIUnknownForObject(policyDelegate));
 
@@ -1060,14 +1061,16 @@ namespace WebKit
             center.defaultCenter().addObserver(progf, "WebViewProgressFinishedNotification", webView);
             progf.OnNotify += new OnNotifyEvent(progf_OnNotify);
             
-            WebView.preferences().setEditingBehavior(WebKitEditingBehavior.WebKitEditingWinBehavior);
+            //WebView.preferences().setEditingBehavior(WebKitEditingBehavior.WebKitEditingWinBehavior);
             ((IWebPreferencesPrivate)WebView.preferences()).setDeveloperExtrasEnabled(1);
 #if DEBUG || RELEASE
             m = new JSManagement(this);
 #endif
-            
             activationContext.Deactivate();
         }
+
+        [DllImport("User32")]
+        public static extern short GetAsyncKeyState(int vKey);
 
         bool uiDelegate_GeolocationReq(WebView sender, webFrame frame, IWebSecurityOrigin orig)
         {
@@ -1584,7 +1587,7 @@ namespace WebKit
                     resourceIntercepter.Resources.Clear();
                     WebKitBrowserNavigatingEventArgs args = new WebKitBrowserNavigatingEventArgs(new Uri(url), frame.name());
                     Navigating(this, args);
-                    if (args.Cancel == true)
+                    if (args.Cancel == true || Convert.ToBoolean(GetAsyncKeyState(4)))
                     {
                         frame.stopLoading();
                     }
@@ -1630,12 +1633,16 @@ namespace WebKit
                 policyDelegate.AllowInitialNavigation = policyDelegate.AllowNavigation;
                 if (Url != null)
                 {
-                    DocumentCompleted(this, new WebBrowserDocumentCompletedEventArgs(this.Url));
-                    if (Url.ToString() == "about:blank") // fix for issue 37: http://code.google.com/p/open-webkit-sharp/issues/detail?id=37
+                    try
                     {
-                        this.DocumentTitle = string.Empty;
-                        DocumentTitleChanged(this, new EventArgs());
+                        DocumentCompleted(this, new WebBrowserDocumentCompletedEventArgs(this.Url));
+                        if (Url.ToString() == "about:blank") // fix for issue 37: http://code.google.com/p/open-webkit-sharp/issues/detail?id=37
+                        {
+                            this.DocumentTitle = string.Empty;
+                            DocumentTitleChanged(this, new EventArgs());
+                        }
                     }
+                    catch { }
                 }
                 ProgressChanged(this, new ProgressChangesEventArgs(1.0));
                 CanGoBackChanged(this, new CanGoBackChangedEventArgs(CanGoBack));
@@ -1745,7 +1752,7 @@ namespace WebKit
 
         #region WebUIDelegate event handlers
         internal string newwindowurl;
-        private void uiDelegate_CreateWebViewWithRequest(IWebURLRequest request, out WebView webView)
+        private void uiDelegate_CreateWebViewWithRequest(IWebURLRequest request, out WebView webView, bool popup = false)
         {
             WebKitBrowser b = new WebKitBrowser();
             if (request != null)
@@ -1759,7 +1766,7 @@ namespace WebKit
                 url = request.url();
             
             NewWindowRequestEventArgs args = new NewWindowRequestEventArgs(url);
-            if (string.IsNullOrEmpty(url))
+            if (popup == true)
             {
                 PopupCreated(this, new NewWindowCreatedEventArgs(b));
             }
@@ -1960,14 +1967,10 @@ namespace WebKit
         /// </summary>
         public void Stop()
         {
-            try
-            {
                 if (webView.isLoading() != 0)
                 {
                     webView.mainFrame().stopLoading();
                 }
-            }
-            catch { }
         }
 
         /// <summary>

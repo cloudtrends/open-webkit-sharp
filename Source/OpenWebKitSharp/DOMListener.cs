@@ -29,7 +29,23 @@ namespace WebKit
 
                 IDOMEventListenerFormouseover mo = new IDOMEventListenerFormouseover(node);
                 mo.Fired += new EventHandler(mo_Fired);
+
+                IDOMEventListenerFormousedown md = new IDOMEventListenerFormousedown(node);
+                md.Fired += new EventHandler(md_Fired);
+
+                IDOMEventListenerFormouseup mu = new IDOMEventListenerFormouseup(node);
+                mu.Fired += new EventHandler(mu_Fired);
             }
+        }
+
+        void mu_Fired(object sender, EventArgs e)
+        {
+            MouseUp(obj, new EventArgs());
+        }
+
+        void md_Fired(object sender, EventArgs e)
+        {
+            MouseDown(obj, new EventArgs());
         }
 
         void mo_Fired(object sender, EventArgs e)
@@ -66,6 +82,10 @@ namespace WebKit
         public event EventHandler KeyDown = delegate { };
 
         public event EventHandler Focus = delegate { };
+
+        public event EventHandler MouseUp = delegate { };
+
+        public event EventHandler MouseDown = delegate { };
     }
     internal class IDOMEventListenerForClicks : IDOMEventListener
     {
@@ -229,6 +249,110 @@ namespace WebKit
         public IDOMEventListenerForkeyup(DOMNode nd)
         {
             ((IDOMEventTarget)nd).addEventListener("keyup", this, 0);
+        }
+        public object callWebScriptMethod(string name, ref object args, int cArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object evaluateWebScript(string script)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void handleEvent(IDOMEvent evt)
+        {
+            Fired(this, new EventArgs());
+        }
+
+        public void removeWebScriptKey(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void setException(string description)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void setWebScriptValueAtIndex(uint index, object val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string stringRepresentation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int throwException(string exceptionMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object webScriptValueAtIndex(uint index)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    internal class IDOMEventListenerFormouseup : IDOMEventListener
+    {
+        internal event EventHandler Fired = delegate { };
+        public IDOMEventListenerFormouseup(DOMNode nd)
+        {
+            ((IDOMEventTarget)nd).addEventListener("mouseup", this, 0);
+        }
+        public object callWebScriptMethod(string name, ref object args, int cArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object evaluateWebScript(string script)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void handleEvent(IDOMEvent evt)
+        {
+            Fired(this, new EventArgs());
+        }
+
+        public void removeWebScriptKey(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void setException(string description)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void setWebScriptValueAtIndex(uint index, object val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string stringRepresentation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int throwException(string exceptionMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object webScriptValueAtIndex(uint index)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    internal class IDOMEventListenerFormousedown : IDOMEventListener
+    {
+        internal event EventHandler Fired = delegate { };
+        public IDOMEventListenerFormousedown(DOMNode nd)
+        {
+            ((IDOMEventTarget)nd).addEventListener("mousedown", this, 0);
         }
         public object callWebScriptMethod(string name, ref object args, int cArgs)
         {

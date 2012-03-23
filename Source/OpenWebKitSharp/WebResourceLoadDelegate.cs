@@ -105,8 +105,16 @@ namespace WebKit
             }
             else
             {
-                request.initWithURL(ret, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
-                return request;
+                if (ret == request.url())
+                {
+                    return request;
+                }
+                else
+                {
+                    IWebURLRequest req = new WebURLRequestClass();
+                    req.initWithURL(ret, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                    return req;
+                }
             }
         }
 

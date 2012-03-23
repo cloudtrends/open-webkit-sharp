@@ -299,12 +299,25 @@ namespace WebKit.DOM
         protected Node(IDOMNode Node) : base((DOMNode)Node)
         {
             this.node = (DOMNode)Node;
-
             Listener.Focus += new EventHandler(Listener_Focus);
             Listener.KeyDown += new EventHandler(Listener_KeyDown);
             Listener.KeyUp += new EventHandler(Listener_KeyUp);
             Listener.MouseClick += new EventHandler(Listener_MouseClick);
             Listener.MouseOver += new EventHandler(Listener_MouseOver);
+            Listener.MouseUp += new EventHandler(Listener_MouseUp);
+            Listener.MouseDown += new EventHandler(Listener_MouseDown);
+        }
+
+        void Listener_MouseDown(object sender, EventArgs e)
+        {
+            if (MouseDown != null)
+                MouseDown(this, new EventArgs());
+        }
+
+        void Listener_MouseUp(object sender, EventArgs e)
+        {
+            if (MouseUp != null)
+                MouseUp(this, new EventArgs());
         }
 
         void Listener_MouseOver(object sender, EventArgs e)
@@ -341,6 +354,10 @@ namespace WebKit.DOM
         public event EventHandler MouseClick = delegate { };
 
         public event EventHandler MouseOver = delegate { };
+
+        public event EventHandler MouseUp = delegate { };
+
+        public event EventHandler MouseDown = delegate { };
 
         public event EventHandler KeyUp = delegate { };
 
@@ -1165,6 +1182,7 @@ namespace WebKit.DOM
             }
         }
 
+
         /// <summary>
         /// Gets or sets the Inner Text of the current element.
         /// </summary>
@@ -1237,7 +1255,13 @@ namespace WebKit.DOM
                 return NamedNodeMap.Create(element.attributes());
             }
         }
-
+        /// <summary>
+        /// Gets a NamedNodeMap of attributes for the element.
+        /// </summary>
+        public NodeList GetElementsByTagName(string name)
+        {
+            return NodeList.Create(element.getElementsByTagName(name));
+        }
         
         /// <summary>
         /// Gets the name of the element.
@@ -1761,6 +1785,8 @@ namespace WebKit.DOM
         {
             event EventHandler MouseClick;
             event EventHandler MouseOver;
+            event EventHandler MouseUp;
+            event EventHandler MouseDown;
             event EventHandler KeyUp;
             event EventHandler KeyDown;
             event EventHandler Focus;

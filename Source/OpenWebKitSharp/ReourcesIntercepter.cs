@@ -93,11 +93,11 @@ namespace WebKit
     public delegate void ResourceSendRequestEventHandler(object sender, WebKitResourceRequestEventArgs e);
     public class ResourcesIntercepter
     {
-        public event ResourceStartedLoadingHandler ResourceStartedLoadingEvent;
-        public event ResourceFinishedLoadingHandler ResourceFinishedLoadingEvent;
-        public event ResourceSizeAvailable ResourceSizeAvailableEvent;
-        public event ResourceSendRequestEventHandler ResourcesSendRequest;
-        public event ResourceFailedHandler ResourceFailedLoading;
+        public event ResourceStartedLoadingHandler ResourceStartedLoadingEvent = delegate { };
+        public event ResourceFinishedLoadingHandler ResourceFinishedLoadingEvent = delegate { };
+        public event ResourceSizeAvailable ResourceSizeAvailableEvent = delegate { };
+        public event ResourceSendRequestEventHandler ResourcesSendRequest = delegate { };
+        public event ResourceFailedHandler ResourceFailedLoading = delegate { };
         public WebKitBrowser Owner;
         public List<WebKitResource> Resources;
         public ResourcesIntercepter(WebKitBrowser browser)

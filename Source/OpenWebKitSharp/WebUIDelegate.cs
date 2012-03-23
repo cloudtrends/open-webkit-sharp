@@ -29,7 +29,6 @@
 
 // TODO: most of these events aren't used at all (yet). Find out what they
 // do and whether they are actually working in WebKit.
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,7 +42,7 @@ using WebKit.DOM;
 namespace WebKit
 {
     internal delegate void CloseWindowRequest(WebView view);
-    internal delegate void CreateWebViewWithRequestEvent(IWebURLRequest request, out WebView webView);
+    internal delegate void CreateWebViewWithRequestEvent(IWebURLRequest request, out WebView webView, bool popup = false);
     internal delegate void StatusTextChangedEvent(string statustext);  
     internal delegate void JavaScriptMessagePanel(string message, string defaulttext);
     internal delegate void RunJavaScriptAlertPanelWithMessageEvent(WebView sender, string message);
@@ -52,6 +51,7 @@ namespace WebKit
     internal delegate void MouseDidMoveOverElement(WebView sender, IDOMNode element);
     internal delegate string RunJavaScriptTextInputPanelWithPromptEvent(WebView sender, string message, string defaultText);
     internal delegate bool AllowGeolocationRequest(WebView sender, webFrame frame, IWebSecurityOrigin orig);
+    internal delegate void AddMessage(WebView sender, string mes, string u, int line, int error);
     internal class WebUIDelegate : IWebUIDelegate, IWebUIDelegatePrivate, IWebUIDelegatePrivate2, IWebUIDelegatePrivate3, IWebUIDelegatePrivate4 
     {
         public event CreateWebViewWithRequestEvent CreateWebViewWithRequest;
@@ -63,6 +63,7 @@ namespace WebKit
         public event RunJavaScriptTextInputPanelWithPromptEvent RunJavaScriptTextInputPanelWithPrompt;
         public event MouseDidMoveOverElement MouseDidMoveOverElement;
         public event AllowGeolocationRequest GeolocationReq;
+        public event AddMessage AddMessageToConsole;
         private WebKitBrowser owner;
 
         public WebUIDelegate(WebKitBrowser browser)
@@ -370,6 +371,7 @@ namespace WebKit
         {
             (sender as WebKit.Interop.WebViewClass).updateFocusedAndActiveState();
             owner.Focus();
+            owner.Select();
         }
 
         public float webViewFooterHeight(WebView WebView)
@@ -478,7 +480,7 @@ namespace WebKit
 
         public void webViewAddMessageToConsole(WebView sender, string message, int lineNumber, string url, int isError)
         {
-            
+            AddMessageToConsole(sender, message, url, lineNumber, isError);
         }
 
         public void webViewClosing(WebView sender)
@@ -508,17 +510,17 @@ namespace WebKit
 
         public void webViewReceivedFocus(WebView sender)
         {
-            
+            owner.Focus();
         }
 
         public void webViewScrolled(WebView sender)
         {
             
         }
-
         public void webViewSetCursor(WebView sender, int cursor)
         {
-            throw new NotImplementedException();
+            owner.Cursor = new System.Windows.Forms.Cursor((IntPtr)cursor);
+            //NativeMethods.SendMessage(owner.webViewHWND, (uint)0x0020, (IntPtr)cursor, (IntPtr)cursor);
         }
 
         public int webViewShouldInterruptJavaScript(WebView sender)
@@ -528,7 +530,16 @@ namespace WebKit
 
         public WebView createWebViewWithRequest(WebView sender, IWebURLRequest request, CFDictionaryPropertyBag windowFeatures)
         {
-            throw new NotImplementedException();
+            if (owner.AllowNewWindows)
+            {
+                WebView view;
+                CreateWebViewWithRequest(request, out view, true);
+                return view;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void decidePolicyForGeolocationRequest(WebView sender, webFrame frame, WebSecurityOrigin origin, IWebGeolocationPolicyListener listener)

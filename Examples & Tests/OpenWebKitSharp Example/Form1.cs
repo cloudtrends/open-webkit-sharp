@@ -542,5 +542,10 @@ namespace OpenWebKitSharp_Test
         private void button10_Click(object sender, EventArgs e)
         {
         }
+
+        private void widthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

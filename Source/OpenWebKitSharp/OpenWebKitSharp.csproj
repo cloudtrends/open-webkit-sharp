@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebKit</RootNamespace>
     <AssemblyName>OpenWebKitSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -61,7 +61,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_NET2|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build NET2\</OutputPath>
+    <OutputPath>..\..\Build_NET2\</OutputPath>
     <Optimize>true</Optimize>
     <WarningLevel>0</WarningLevel>
     <NoWarn>;2008</NoWarn>

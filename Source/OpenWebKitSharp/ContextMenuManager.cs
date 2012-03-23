@@ -28,14 +28,18 @@ namespace WebKit
         public WebKitBrowser Owner;
         public BodyContextMenu BodyMenu;
         public TextContextMenu SelectedTextMenu;
-        public LinkContextMenu LinkOrImageContextMenu;
+        public LinkAndImageContextMenu LinkOrImageContextMenu;
+        public LinkContextMenu LinkContextMenu;
+        public ImageContextMenu ImageContextMenu;
         public event ShowContextMenu ShowContextMenu = delegate { };
         public ContextMenuManager(WebKitBrowser browser)
         {
             this.Owner = browser;
             this.BodyMenu = new BodyContextMenu(browser);
             this.SelectedTextMenu = new TextContextMenu(browser);
-            this.LinkOrImageContextMenu = new LinkContextMenu(browser);
+            this.LinkContextMenu = new LinkContextMenu(browser);
+            this.LinkOrImageContextMenu = new LinkAndImageContextMenu(browser);
+            this.ImageContextMenu = new ImageContextMenu(browser);
         }
 
         internal void FireShowContextMenu()
@@ -53,8 +57,15 @@ namespace WebKit
                 }
                 if (this.AppropriateContextMenuType == ContextMenuType.TextSelected)
                     SelectedTextMenu.Show(Owner, currentpoint);
-                if (this.AppropriateContextMenuType == ContextMenuType.Link || this.AppropriateContextMenuType == ContextMenuType.Image || AppropriateContextMenuType == ContextMenuType.ImageAndLink)
+                if (this.AppropriateContextMenuType == ContextMenuType.ImageAndLink)
+                {
                     LinkOrImageContextMenu.Show(Owner, currentpoint);
+                    return;
+                }
+                if (this.AppropriateContextMenuType == ContextMenuType.Image)
+                    ImageContextMenu.Show(Owner, currentpoint);
+                if (this.AppropriateContextMenuType == ContextMenuType.Link)
+                    LinkContextMenu.Show(Owner, currentpoint);
             }
         }
 
@@ -218,13 +229,190 @@ namespace WebKit
             owner.Navigate("http://www.google.com/search?q=" + owner.SelectedText);
         }
     }
+    public class ImageContextMenu : ContextMenu
+    {
+        WebKitBrowser owner;
+        public ImageContextMenu(WebKitBrowser br)
+        {
+            owner = br;
+            this.MenuItems.Add("Open Image").Click += new EventHandler(ImageContextMenu1);
+            this.MenuItems.Add("Open Image in New Window").Click += new EventHandler(ImageContextMenu2);
+            this.MenuItems.Add("Download Image").Click += new EventHandler(ImageContextMenu3);
+            this.MenuItems.Add("-");
+            this.MenuItems.Add("Inspect").Click += new EventHandler(Inspect);
+        }
+
+        void Inspect(object sender, EventArgs e)
+        {
+            owner.ShowInspector();
+            owner.WebView.inspector().attach();
+        }
+        void ImageContextMenu1(object sender, EventArgs e)
+        {
+            owner.Navigate(FormatImageLink(owner.GetCurrentElement().GetAttribute("src")));
+        }
+        void ImageContextMenu3(object sender, EventArgs e)
+        {
+            _ownerInvoke(() =>
+            {
+                WebKitBrowser.activationContext.Activate();
+                WebDownload d = new WebDownloadClass();
+                WebURLRequest request = new WebURLRequestClass();
+                request.initWithURL(FormatImageLink(owner.GetCurrentElement().GetAttribute("src")), _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                d.initWithRequest(request, owner.downloadDelegate);
+                owner.downloadDelegate.decideDestinationWithSuggestedFilename(d, URLToFileName(request.url(), true));
+                WebKitBrowser.activationContext.Deactivate();
+            });
+        }
+        string FormatImageLink(string iurl)
+        {
+            if (Uri.IsWellFormedUriString(iurl, UriKind.Absolute))
+                return iurl;
+            else
+                return "http://" + owner.Url.Host + iurl;
+        }
+        void ImageContextMenu2(object sender, EventArgs e)
+        {
+            _ownerInvoke(() =>
+            {
+                WebKitBrowser.activationContext.Activate();
+                WebURLRequest request = new WebURLRequestClass();
+
+                request.initWithURL(FormatImageLink(owner.GetCurrentElement().GetAttribute("src")), _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                owner.uiDelegate.createWebViewWithRequest((WebView)owner.GetWebViewAsObject(), request);
+                WebKitBrowser.activationContext.Deactivate();
+            });
+        }
+
+        string URLToFileName(string url, bool image = false)
+        {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                url = "http://" + owner.Url.Host + url;
+            Uri u = new Uri(url);
+            string fn = u.Segments[u.Segments.Length - 1];
+            if (!fn.EndsWith("/"))
+            {
+                return u.Segments[u.Segments.Length - 1];
+            }
+            else
+                if (image)
+                    return "Unrecognised Download.jpg";
+                else
+                    return "Unrecognised Download.file";
+        }
+
+        private delegate TResult Fn<TResult>();
+        private delegate void Fn();
+
+        private TResult _ownerInvoke<TResult>(Fn<TResult> method)
+        {
+            if (owner.InvokeRequired)
+                return (TResult)owner.Invoke(method);
+            else
+                return method();
+        }
+
+        private void _ownerInvoke(Fn method)
+        {
+            if (owner.InvokeRequired)
+                owner.Invoke(method);
+            else
+                method();
+        }
+    }
     public class LinkContextMenu : ContextMenu
     {
         WebKitBrowser owner;
         public LinkContextMenu(WebKitBrowser br)
         {
             this.owner = br;
-            this.Popup += new EventHandler(TextContextMenu_Popup);
+            this.MenuItems.Add("Open Link").Click += new EventHandler(LinkContextMenu_Click);
+            this.MenuItems.Add("Open Link in New Window").Click += new EventHandler(LinkContextMenu2_Click);
+            this.MenuItems.Add("Download Linked File").Click += new EventHandler(LinkContextMenu3_Click);
+            this.MenuItems.Add("Copy Link").Click += new EventHandler(CopyContextMenu_Click);
+            this.MenuItems.Add("-");
+            this.MenuItems.Add("Inspect").Click += new EventHandler(Inspect);
+        }
+
+        void Inspect(object sender, EventArgs e)
+        {
+            owner.ShowInspector();
+        }
+        
+        
+        void CopyContextMenu_Click(object sender, EventArgs e)
+        {
+            owner.WebView.copyURL(owner.LastSelectedLink);
+        }
+        string URLToFileName(string url, bool image = false)
+        {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                url = "http://" + owner.Url.Host + url;
+            Uri u = new Uri(url);
+            string fn = u.Segments[u.Segments.Length - 1];
+            if (!fn.EndsWith("/"))
+            {
+                return u.Segments[u.Segments.Length - 1];
+            }
+            else
+                if (image)
+                    return "Unrecognised Download.jpg";
+                else
+                    return "Unrecognised Download.file";
+        }
+        void LinkContextMenu3_Click(object sender, EventArgs e)
+        {
+            _ownerInvoke(() =>
+            {
+                WebKitBrowser.activationContext.Activate();
+                WebDownload d = new WebDownloadClass();
+                WebURLRequest request = new WebURLRequestClass();
+                request.initWithURL(owner.LastSelectedLink, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                d.initWithRequest(request, owner.downloadDelegate);
+                owner.downloadDelegate.decideDestinationWithSuggestedFilename(d, URLToFileName(request.url()));
+                WebKitBrowser.activationContext.Deactivate();
+            });
+        }
+        void LinkContextMenu2_Click(object sender, EventArgs e)
+        {
+            _ownerInvoke(() =>
+            {
+                WebKitBrowser.activationContext.Activate();
+                WebURLRequest request = new WebURLRequestClass();
+                request.initWithURL(owner.LastSelectedLink, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                owner.uiDelegate.createWebViewWithRequest((WebView)owner.GetWebViewAsObject(), request);
+                WebKitBrowser.activationContext.Deactivate();
+            });
+        }
+        void LinkContextMenu_Click(object sender, EventArgs e)
+        {
+            owner.Navigate(owner.LastSelectedLink);
+        }
+        private delegate TResult Fn<TResult>();
+        private delegate void Fn();
+
+        private TResult _ownerInvoke<TResult>(Fn<TResult> method)
+        {
+            if (owner.InvokeRequired)
+                return (TResult)owner.Invoke(method);
+            else
+                return method();
+        }
+
+        private void _ownerInvoke(Fn method)
+        {
+            if (owner.InvokeRequired)
+                owner.Invoke(method);
+            else
+                method();
+        }
+    }
+    public class LinkAndImageContextMenu : ContextMenu
+    {
+        WebKitBrowser owner;
+        public LinkAndImageContextMenu(WebKitBrowser br)
+        {
+            this.owner = br;
             this.MenuItems.Add("Open Link").Click += new EventHandler(LinkContextMenu_Click); 
             this.MenuItems.Add("Open Link in New Window").Click += new EventHandler(LinkContextMenu2_Click);
             this.MenuItems.Add("Download Linked File").Click += new EventHandler(LinkContextMenu3_Click);
@@ -276,42 +464,6 @@ namespace WebKit
                 owner.uiDelegate.createWebViewWithRequest((WebView)owner.GetWebViewAsObject(), request);
                 WebKitBrowser.activationContext.Deactivate();
             });
-        }
-        void TextContextMenu_Popup(object sender, EventArgs e)
-        {
-            if (owner.CustomContextMenuManager.AppropriateContextMenuType == ContextMenuType.Link)
-            {
-                MenuItems[0].Visible = true;
-                MenuItems[1].Visible = true;
-                MenuItems[2].Visible = true;
-                MenuItems[3].Visible = true;
-                MenuItems[4].Visible = false;
-                MenuItems[5].Visible = false;
-                MenuItems[6].Visible = false;
-                MenuItems[7].Visible = false;
-            }
-            if (owner.CustomContextMenuManager.AppropriateContextMenuType == ContextMenuType.Image)
-            {
-                MenuItems[0].Visible = false;
-                MenuItems[1].Visible = false;
-                MenuItems[2].Visible = false;
-                MenuItems[3].Visible = false;
-                MenuItems[4].Visible = false;
-                MenuItems[5].Visible = true;
-                MenuItems[6].Visible = true;
-                MenuItems[7].Visible = true;
-            }
-            if (owner.CustomContextMenuManager.AppropriateContextMenuType == ContextMenuType.ImageAndLink)
-            {
-                MenuItems[0].Visible = true;
-                MenuItems[1].Visible = true;
-                MenuItems[2].Visible = true;
-                MenuItems[3].Visible = true;
-                MenuItems[4].Visible = true;
-                MenuItems[5].Visible = true;
-                MenuItems[6].Visible = true;
-                MenuItems[7].Visible = true;
-            }
         }
         void CopyContextMenu_Click(object sender, EventArgs e)
         {

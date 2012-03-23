@@ -63,6 +63,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WebKit.Interop, Version=534.0.0.0, Culture=neutral, PublicKeyToken=d6b823da6d3fa04b, processorArchitecture=MSIL">

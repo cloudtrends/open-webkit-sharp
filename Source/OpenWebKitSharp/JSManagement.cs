@@ -10,13 +10,35 @@ using WebKit.Interop;
 
 namespace WebKit
 {
+    public class ConsoleEventArgs : EventArgs
+    {
+        public string Message { get; internal set; }
+        public string Url { get; internal set; }
+        public int LineNumber { get; internal set; }
+        public bool IsError { get; internal set; }
+        public ConsoleEventArgs(string message, string url, int error, int linenumber)
+        {
+            Message = message;
+            Url = url;
+            IsError = Convert.ToBoolean(error);
+            LineNumber = linenumber;
+        }
+    }
+    public delegate void ConsoleEventHandler(object sender, ConsoleEventArgs e);
     public class JSManagement
     {
+        public event ConsoleEventHandler ConsoleMessageAdded = delegate { };
         WebKitBrowser _owner;
         public JSManagement(WebKitBrowser browser)
         {
             _owner = browser;
             ScriptObject = new JSCore.JSContext(browser.WebView.mainFrame());
+            browser.uiDelegate.AddMessageToConsole += new AddMessage(uiDelegate_AddMessageToConsole);
+        }
+
+        void uiDelegate_AddMessageToConsole(WebView sender, string mes, string u, int line, int error)
+        {
+            ConsoleMessageAdded(this, new ConsoleEventArgs(mes, u, error, line));
         }
 
         /// <summary>
@@ -41,7 +63,6 @@ namespace WebKit
                 return null;
             JSCore.JSObject windowObj = window.ToObject();
             return windowObj.CallFunction(Name, arguments);
-            //return GlobalContext.GetGlobalObject().CallFunction(Name, arguments);
         }
 
         /// <summary>
