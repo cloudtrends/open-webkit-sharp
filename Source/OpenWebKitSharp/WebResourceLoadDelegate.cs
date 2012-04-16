@@ -59,7 +59,7 @@ namespace WebKit
             WebURLResponse resp = null;
             resources.TryGetValue(identifier, out resp);
             if (resp != null)
-            ResourceFailedLoading(resources[identifier], error);
+               ResourceFailedLoading(resources[identifier], error);
         }
 
         public void didFinishLoadingFromDataSource(WebView WebView, uint identifier, IWebDataSource dataSource)

@@ -157,16 +157,15 @@ namespace WebKit
 
         public WebDragSourceAction dragSourceActionMaskForPoint(WebView WebView, ref tagPOINT point)
         {
-            //HTMLElement e = (HTMLElement)owner.GetCurrentElement();
-            //if (e.Type == ElementType.Image)
-            //    return WebDragSourceAction.WebDragSourceActionImage;
-            //else if (e.Type == ElementType.LinkOrUknown)
-            //    return WebDragSourceAction.WebDragSourceActionLink;
-            //else if (!string.IsNullOrEmpty(owner.SelectedText))
-            //    return WebDragSourceAction.WebDragSourceActionSelection;
-            //else
-            //    return WebDragSourceAction.WebDragSourceActionAny;
-            return WebDragSourceAction.WebDragSourceActionAny;
+            Node e = owner.ElementAtPoint(new Point(point.x, point.y));
+            if (e.Type == ElementType.Image)
+                return WebDragSourceAction.WebDragSourceActionImage;
+            else if (e.Type == ElementType.LinkOrUknown)
+                return WebDragSourceAction.WebDragSourceActionLink;
+            else if (!string.IsNullOrEmpty(owner.SelectedText))
+                return WebDragSourceAction.WebDragSourceActionSelection;
+            else
+                return WebDragSourceAction.WebDragSourceActionAny;
         }
 
         public void drawCustomMenuItem(WebView sender, IntPtr drawItem)
@@ -318,6 +317,7 @@ namespace WebKit
 
         public void setStatusText(WebView sender, string text)
         {
+            
         }
 
         public void setToolbarsVisible(WebView sender, int visible)
@@ -442,7 +442,7 @@ namespace WebKit
 
         public IDataObject willPerformDragSourceAction(WebView WebView, WebDragSourceAction action, ref tagPOINT point, IDataObject pasteboard)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         #endregion
@@ -510,7 +510,6 @@ namespace WebKit
 
         public void webViewReceivedFocus(WebView sender)
         {
-            owner.Focus();
         }
 
         public void webViewScrolled(WebView sender)
@@ -545,7 +544,12 @@ namespace WebKit
         public void decidePolicyForGeolocationRequest(WebView sender, webFrame frame, WebSecurityOrigin origin, IWebGeolocationPolicyListener listener)
         {
             if (GeolocationReq(sender, frame, origin) == true)
-                listener.allow();
+            {
+                if (listener != null)
+                {
+                    listener.allow();
+                }
+            }
             else
                 listener.deny();
         }
@@ -558,7 +562,7 @@ namespace WebKit
 
         public void didPressMissingPluginButton(IDOMElement __MIDL__IWebUIDelegatePrivate30000)
         {
-            
+            owner.OnMissingPlugin(__MIDL__IWebUIDelegatePrivate30000);
         }
 
 

@@ -44,6 +44,7 @@ using WebKit;
 using WebKit.DOM;
 using WebKit.CSS;
 using WebKit.Interop;
+using WebKit.Appearance;
 #if DOTNET4
 using WebKit.JSCore;
 #endif
@@ -99,6 +100,7 @@ namespace WebKit
         internal WebNotificationObserver observer;
         internal WebNotificationCenter center;
         internal WebKitDOMCSSManager cssmanager;
+        internal AppearanceSettings appearance;
         //internal WebEditingDelegate editingDelegate;
         internal ContextMenuManager contextmenumanager;
         internal WebResourceLoadDelegate resourcesLoadDelegate;
@@ -888,7 +890,7 @@ namespace WebKit
             InitializeComponent();
 
             CheckForIllegalCrossThreadCalls = false; // this will prevent exceptions that occur when you use the favicon event 
-
+            
             PageSettings = new PageSettings();
             if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
             {
@@ -929,7 +931,6 @@ namespace WebKit
             }
         }
 
-
         internal string LastSelectedLink { get; set; }
 
         public void ShowInspector()
@@ -969,6 +970,7 @@ namespace WebKit
             //editingDelegate = new WebEditingDelegate(this);
             //Marshal.AddRef(Marshal.GetIUnknownForObject(editingDelegate));
             // not used (yet)
+
             policyDelegate = new WebPolicyDelegate(AllowNavigation, AllowDownloads, AllowNewWindows);
             Marshal.AddRef(Marshal.GetIUnknownForObject(policyDelegate));
 
@@ -982,6 +984,8 @@ namespace WebKit
             Marshal.AddRef(Marshal.GetIUnknownForObject(cssmanager));
 
             undoManager = new CustomUndoSystem(this);
+
+            appearance = new AppearanceSettings(this);
 
             observer = new WebNotificationObserver();
 
@@ -1072,9 +1076,9 @@ namespace WebKit
         [DllImport("User32")]
         public static extern short GetAsyncKeyState(int vKey);
 
-        bool uiDelegate_GeolocationReq(WebView sender, webFrame frame, IWebSecurityOrigin orig)
+        bool uiDelegate_GeolocationReq(WebView sender, webFrame frame, IWebSecurityOrigin o)
         {
-            GeolocationRequestEventArgs args = new GeolocationRequestEventArgs(frame.provisionalDataSource().request().url(), true, orig);
+            GeolocationRequestEventArgs args = new GeolocationRequestEventArgs(Url.ToString(), true, o);
             GeolocationPositionRequest(this, args);
             return args.Allow;
         }
@@ -1129,6 +1133,16 @@ namespace WebKit
             return resourceIntercepter.ResReq(url);
         }
 
+
+        [Browsable(true), Category("Appearance"), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Description("Gets the AppearanceSettings object which allows the user to change the way pages are rendered.")]
+        public AppearanceSettings Appearance
+        {
+            get { return appearance; }
+        }
+
+        [Browsable(true), Category("Behavior"), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Description("Gets the object that allows interference with resource loading and monitoring.")]
         public ResourcesIntercepter ResourceIntercepter
         {
             get
@@ -1169,6 +1183,7 @@ namespace WebKit
                 undoManager.node = (IDOMHTMLInputElement)element;
             try
             {
+                if (element != null && element.GetType().Name != "__ComObject")
                 MouseDidMoveOverElement(this, new MouseDidMoveOverElementEventArgs((Element)Element.Create((DOMNode)element)));
             }
             catch { }
@@ -1468,6 +1483,8 @@ namespace WebKit
                             Bitmap favicon = (Bitmap)Image.FromStream(stream);
                             Icon theIco = System.Drawing.Icon.FromHandle(favicon.GetHicon());
                             FaviconAvailable(this, new FaviconAvailableEventArgs(theIco));
+                            stream.Flush();
+                            stream.Dispose();
                         }
                     }
                     else if (theURL.Host == "html5test.com" | theURL.AbsoluteUri == "http://www.html5test.com/")
@@ -1480,6 +1497,8 @@ namespace WebKit
                             Bitmap favicon = (Bitmap)Image.FromStream(stream);
                             Icon theIco = System.Drawing.Icon.FromHandle(favicon.GetHicon());
                             FaviconAvailable(this, new FaviconAvailableEventArgs(theIco));
+                            stream.Flush();
+                            stream.Dispose();
                         }
                     }
                     else if (theURL.Host == "sites.google.com" | theURL.AbsoluteUri == "www.google.com/images/icons/product/sites-16.ico")
@@ -1494,19 +1513,26 @@ namespace WebKit
                             Icon theIco = System.Drawing.Icon.FromHandle(favicon.GetHicon());
                             
                             FaviconAvailable(this, new FaviconAvailableEventArgs(theIco));
+
+                            stream.Flush();
+                            stream.Dispose();
                         }
                     }
                     else
                     {
-                        string iconURL = "http://" + theURL.Host + "/favicon.ico";
-                        System.Net.WebRequest request = System.Net.WebRequest.Create(iconURL);
-                        
-                        using (System.Net.WebResponse responseSys = request.GetResponse())
+                        using (System.Net.WebClient webclient = new System.Net.WebClient())
                         {
-                            System.IO.Stream stream = responseSys.GetResponseStream();
-                            Bitmap favicon = (Bitmap)Image.FromStream(stream);
-                            Icon theIco = System.Drawing.Icon.FromHandle(favicon.GetHicon());
-                            FaviconAvailable(this, new FaviconAvailableEventArgs(theIco));
+                            using (System.IO.MemoryStream MemoryStream = new System.IO.MemoryStream(webclient.DownloadData("http://www.google.com/s2/favicons?domain=" + theURL.Host)))
+                            {
+                                webclient.Dispose();
+                                Image favicon = Image.FromStream(MemoryStream);
+                                Bitmap bmp = (Bitmap)favicon;
+                                if (favicon != null)
+                                    FaviconAvailable(this, new FaviconAvailableEventArgs(Icon.FromHandle(bmp.GetHicon())));
+                                else
+                                    FaviconAvailable(this, new FaviconAvailableEventArgs(Properties.Resources.New_document));
+                                MemoryStream.Flush();
+                            }
                         }
                     }
                 }
@@ -1514,35 +1540,6 @@ namespace WebKit
                 {
                     FaviconAvailable(this, new FaviconAvailableEventArgs(WebKit.Properties.Resources.New_document));
                 }
-
-                // old code:
-                //Uri u = new Uri((string)e.Argument);
-                //if (u.Host == "www.youtube.com" || u.AbsoluteUri == "http://www.youtube.com/")
-                //{
-                //    using (System.Net.WebClient webclient = new System.Net.WebClient())
-                //    {
-                //        using (System.IO.MemoryStream MemoryStream = new System.IO.MemoryStream(webclient.DownloadData("http://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico")))
-                //        {
-                //            webclient.Dispose();
-                //            Image favicon = Image.FromStream(MemoryStream);
-                //            Bitmap bmp = (Bitmap)favicon;
-                //            FaviconAvailable(this, new FaviconAvailableEventArgs(Icon.FromHandle(bmp.GetHicon())));
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    using (System.Net.WebClient webclient = new System.Net.WebClient())
-                //    {
-                //        using (System.IO.MemoryStream MemoryStream = new System.IO.MemoryStream(webclient.DownloadData("http://www.google.com/s2/favicons?domain=" + u.Host)))
-                //        {
-                //            webclient.Dispose();
-                //            Image favicon = Image.FromStream(MemoryStream);
-                //            Bitmap bmp = (Bitmap)favicon;
-                //            FaviconAvailable(this, new FaviconAvailableEventArgs(Icon.FromHandle(bmp.GetHicon())));
-                //        }
-                //    }
-                //}
                 
             }
         }
@@ -1563,16 +1560,21 @@ namespace WebKit
             { }
             return false;
         }
-        private Icon Base64ToIcon(string base64String)
+
+        internal void OnMissingPlugin(IDOMElement el)
         {
-            byte[] imageBytes = Convert.FromBase64String(base64String);
-            MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-            ms.Write(imageBytes, 0, imageBytes.Length);
-            Bitmap img = (Bitmap)Bitmap.FromStream(ms, true);
-            Icon ico = Icon.FromHandle(img.GetHicon());
-            ms.Dispose();
-            return ico;
+            PluginFailed(this, new PluginFailedErrorEventArgs("Plugin missing for element with TagName: " + el.tagName()));
         }
+        //private Icon Base64ToIcon(string base64String)
+        //{
+        //    byte[] imageBytes = Convert.FromBase64String(base64String);
+        //    MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+        //    ms.Write(imageBytes, 0, imageBytes.Length);
+        //    Bitmap img = (Bitmap)Bitmap.FromStream(ms, true);
+        //    Icon ico = Icon.FromHandle(img.GetHicon());
+        //    ms.Dispose();
+        //    return ico;
+        //}
         private void frameLoadDelegate_DidStartProvisionalLoadForFrame(WebView WebView, IWebFrame frame)
         { 
             if (frame == webView.mainFrame())
@@ -1584,10 +1586,11 @@ namespace WebKit
                     bw.DoWork += new DoWorkEventHandler(bw_DoWork);
                     HeadersAvailableEventArgs h = new HeadersAvailableEventArgs(new Uri(frame.provisionalDataSource().request().url()), frame.provisionalDataSource().request());
                     bw.RunWorkerAsync(h);
-                    resourceIntercepter.Resources.Clear();
+                    if (resourceIntercepter != null)
+                        resourceIntercepter.Resources.Clear();
                     WebKitBrowserNavigatingEventArgs args = new WebKitBrowserNavigatingEventArgs(new Uri(url), frame.name());
                     Navigating(this, args);
-                    if (args.Cancel == true || Convert.ToBoolean(GetAsyncKeyState(4)))
+                    if (args.Cancel == true)
                     {
                         frame.stopLoading();
                     }
@@ -1686,10 +1689,14 @@ namespace WebKit
         }
 
         #endregion
+
+        [Description("Activates the context so that interference with WebKit COM Types is allowed.")]
         public static void ActivateContext()
         {
             activationContext.Activate();
         }
+        
+        [Description("Deactivates the activation context after interference with WebKit COM Types is finished")]
         public static void DeactivateContext()
         {
             activationContext.Deactivate();
@@ -1762,7 +1769,7 @@ namespace WebKit
             }
             webView = (WebView) b.webView;
             string url = newwindowurl;
-            if (string.IsNullOrEmpty(newwindowurl))
+            if (string.IsNullOrEmpty(newwindowurl) && request != null)
                 url = request.url();
             
             NewWindowRequestEventArgs args = new NewWindowRequestEventArgs(url);
@@ -1788,8 +1795,11 @@ namespace WebKit
 
         #endregion
 
-        #region Public Methods
-
+        #region Authentication
+        public string Username { get; set; }
+        public string Password { get; set; }
+        #endregion
+        #region Editing
         public void Undo()
         {
             undoManager.Undo();
@@ -1798,6 +1808,25 @@ namespace WebKit
         {
             undoManager.Redo();
         }
+        public void Paste()
+        {
+            if (WebView != null)
+                WebView.paste(WebView);
+        }
+        public void Cut()
+        {
+            if (WebView != null)
+                WebView.cut(WebView);
+        }
+        public void Copy()
+        {
+            if (WebView != null)
+                WebView.copy(WebView);
+        }
+        #endregion
+        #region Public Methods
+
+        
         [Description("Shows the downloader form to the user.")]
         public void ShowDownloader()
         {
@@ -1854,16 +1883,41 @@ namespace WebKit
         {
             if (loaded)
             {
+                if (url.StartsWith("javascript::"))
+                {
+#if DEBUG || RELEASE
+                    try
+                    {
+                        GetScriptManager.EvaluateScript(url.Split(Convert.ToChar("::"))[1]);
+                    }
+                    catch (Exception ex) { Error(this, new WebKitBrowserErrorEventArgs("JavaScript execution failed: " + ex.Message)); }
+#else
+                    try
+                    {
+                        StringByEvaluatingJavaScriptFromString(url);
+                    }
+                    catch (Exception ex) {Error(this, new WebKitBrowserErrorEventArgs("JavaScript execution failed: " + ex.Message)); }
+#endif
+                    return;
+                }
                 // prepend with "http://" if url not well formed
                 if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                     url = "http://" + url;
                 else
                     url = "" + url;
                 activationContext.Activate();
+
+                WebMutableURLRequest request = new WebMutableURLRequest();
+
+                request.setHTTPMethod("GET");
                 
-                WebURLRequest request = new WebURLRequest();
                 request.initWithURL(url, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
-                webView.mainFrame().loadRequest(request);
+                
+                if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                    request.setValue("Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(string.Format("{0}:{1}", Username, Password))), "Authorization");
+                
+                webView.mainFrame().loadRequest((WebURLRequest)request);
+
                 activationContext.Deactivate();
             }
             else

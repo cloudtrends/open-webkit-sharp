@@ -129,9 +129,9 @@ namespace WebKit
         {
             try
             {
+                Resources.Add(new WebKitResource(res, (int)res.expectedContentLength()));
                 if (Owner.WebView != null)
                     ResourceFinishedLoadingEvent(this, new WebKitResourcesEventArgs(res));
-                Resources.Add(new WebKitResource(res, (int)res.expectedContentLength()));
             }
             catch { }
         }

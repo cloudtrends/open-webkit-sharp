@@ -129,12 +129,12 @@ namespace WebKit
     {
         public bool Allow { get; set; }
         public string Url { get; internal set; }
-        public IWebSecurityOrigin SecurityOrigin { get; internal set; }
-        public GeolocationRequestEventArgs(string u, bool a, IWebSecurityOrigin orig)
+        public IWebSecurityOrigin Origin { get; internal set; }
+        public GeolocationRequestEventArgs(string u, bool a, IWebSecurityOrigin o)
         {
             Url = u;
             Allow = a;
-            SecurityOrigin = orig;
+            Origin = o;
         }
     }
     public class MouseDidMoveOverElementEventArgs : EventArgs

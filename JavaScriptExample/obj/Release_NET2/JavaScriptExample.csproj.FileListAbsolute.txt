@@ -9,3 +9,9 @@ C:\OpenWebKitSharp\JavaScriptExample\obj\Release_NET2\JavaScriptExample.Properti
 C:\OpenWebKitSharp\JavaScriptExample\obj\Release_NET2\JavaScriptExample.csproj.GenerateResource.Cache
 C:\OpenWebKitSharp\JavaScriptExample\obj\Release_NET2\JavaScriptExample.exe
 C:\OpenWebKitSharp\JavaScriptExample\obj\Release_NET2\JavaScriptExample.pdb
+C:\OpenWebKitSharp\Build NET2\JavaScriptExample.exe.config
+C:\OpenWebKitSharp\Build NET2\JavaScriptExample.exe
+C:\OpenWebKitSharp\Build NET2\JavaScriptExample.pdb
+C:\Build_NET2\JavaScriptExample.exe.config
+C:\Build_NET2\JavaScriptExample.exe
+C:\Build_NET2\JavaScriptExample.pdb

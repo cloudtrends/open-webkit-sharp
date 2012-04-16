@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using WebKit;
 using WebKit.DOM;
 using WebKit.Interop;
-#if DOTNET4
+#if DEBUG || RELEASE
 using WebKit.JSCore;
 #endif
 namespace OpenWebKitSharp_Test
@@ -453,6 +453,7 @@ namespace OpenWebKitSharp_Test
             browser.Navigating += new WebKitBrowserNavigatingEventHandler(webKitBrowser1_Navigating);
             browser.DocumentCompleted +=new WebBrowserDocumentCompletedEventHandler(webKitBrowser1_DocumentCompleted);
             browser.CanGoBackChanged +=new CanGoBackChanged(webKitBrowser1_CanGoBackChanged);
+            browser.GeolocationPositionRequest += new GeolocationRequest(browser_GeolocationPositionRequest);
             browser.CanGoForwardChanged +=new CanGoForwardChanged(webKitBrowser1_CanGoForwardChanged);
             browser.CloseWindowRequest +=new EventHandler(webKitBrowser1_CloseWindowRequest);
             browser.DangerousSiteDetected +=new EventHandler(webKitBrowser1_DangerousSiteDetected);
@@ -475,6 +476,11 @@ namespace OpenWebKitSharp_Test
             browser.ResourceIntercepter.ResourcesSendRequest += new ResourceSendRequestEventHandler(ResourceIntercepter_ResourcesSendRequest);
             browser.ResourceIntercepter.ResourceFailedLoading += new ResourceFailedHandler(ResourceIntercepter_ResourceFailedLoading);
         
+        }
+
+        void browser_GeolocationPositionRequest(object sender, GeolocationRequestEventArgs e)
+        {
+            e.Allow = true;
         }
 
         void browser_HeadersAvailable(object sender, HeadersAvailableEventArgs e)
@@ -537,15 +543,6 @@ namespace OpenWebKitSharp_Test
         private void removeTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tabControl1.Controls.Remove(tabControl1.SelectedTab);
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void widthToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebKit</RootNamespace>
     <AssemblyName>OpenWebKitSharp</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="ActivationContext.cs" />
     <Compile Include="AntiPhish.cs" />
+    <Compile Include="AppearanceSettings.cs" />
     <Compile Include="ContextMenuManager.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -13,3 +13,9 @@ C:\OpenWebKitSharp\Examples & Tests\OpenWebKitSharp Example\obj\x86\Debug_NET2\O
 C:\OpenWebKitSharp\Examples & Tests\OpenWebKitSharp Example\obj\x86\Debug_NET2\OpenWebKitSharp Example.csproj.GenerateResource.Cache
 C:\OpenWebKitSharp\Examples & Tests\OpenWebKitSharp Example\obj\x86\Debug_NET2\Example.exe
 C:\OpenWebKitSharp\Examples & Tests\OpenWebKitSharp Example\obj\x86\Debug_NET2\Example.pdb
+C:\OpenWebKitSharp\Build NET2\Example.exe.config
+C:\OpenWebKitSharp\Build NET2\Example.exe
+C:\OpenWebKitSharp\Build NET2\Example.pdb
+C:\OpenWebKitSharp\Build_NET2\Example.exe.config
+C:\OpenWebKitSharp\Build_NET2\Example.exe
+C:\OpenWebKitSharp\Build_NET2\Example.pdb

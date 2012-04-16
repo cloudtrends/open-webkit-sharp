@@ -17,6 +17,7 @@ namespace WebKit
         private  bool _WillGetFavicon = true;
         private  bool _AutomaticallyCheckForPhishingBehavior = true;
         private bool _useFontSmoothing = false;
+        private bool _dnsprefetch = true;
         private  Encoding _initialEncoding = null;
         private static string _WebKitPath = System.Windows.Forms.Application.StartupPath;
         internal WebKitBrowser browser;
@@ -31,7 +32,30 @@ namespace WebKit
                 preferences.setWebSecurityEnabled(Convert.ToInt32(value));
             }
         }
-        
+
+        public bool IgnoreSSLErrors
+        {
+            get
+            {
+                if (Environment.GetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS") != null)
+                    return Convert.ToBoolean(Environment.GetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS"));
+                else
+                {
+                    Environment.SetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS", "0");
+                    return false;
+                }
+            }
+            set
+            {
+                Environment.SetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS", Convert.ToInt32(value).ToString());
+            }
+        }
+
+        public bool EnableDNSPrefetching
+        {
+            get { return _dnsprefetch; }
+            set { browser.Preferences.preferences.setDNSPrefetchingEnabled(Convert.ToInt32(value)); _dnsprefetch = value; }
+        }
         public GlobalPreferences(WebKitBrowser browser)
         {
             WebKitBrowser.activationContext.Activate();
