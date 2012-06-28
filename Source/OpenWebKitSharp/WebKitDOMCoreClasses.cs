@@ -191,7 +191,7 @@ namespace WebKit.DOM
         /// <returns>The added node.</returns>
         public Node SetNamedItem(Node Node)
         {
-            return Node.Create(namedNodeMap.setNamedItem((DOMNode)Node.GetWebKitObject()));
+            return Node.Create(namedNodeMap.setNamedItem((IDOMNode)Node.GetWebKitObject()));
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace WebKit.DOM
         /// <returns>The added node.</returns>
         public Node SetNamedItemNS(Node Node)
         {
-            return Node.Create(namedNodeMap.setNamedItemNS((DOMNode)Node.GetWebKitObject()));
+            return Node.Create(namedNodeMap.setNamedItemNS((IDOMNode)Node.GetWebKitObject()));
         }
 
 
@@ -282,7 +282,7 @@ namespace WebKit.DOM
     /// </summary>
     public class Node : NodeEventTarget 
     {
-        private DOMNode node;
+        private IDOMNode node;
         /// <summary>
         /// Gets the underlying WebKit DOMNode object.
         /// </summary>
@@ -298,7 +298,7 @@ namespace WebKit.DOM
         /// <param name="Node">WebKit DOMNode object.</param>
         protected Node(IDOMNode Node) : base((DOMNode)Node)
         {
-            this.node = (DOMNode)Node;
+            this.node = Node;
             Listener.Focus += new EventHandler(Listener_Focus);
             Listener.KeyDown += new EventHandler(Listener_KeyDown);
             Listener.KeyUp += new EventHandler(Listener_KeyUp);
@@ -392,7 +392,7 @@ namespace WebKit.DOM
 
             }
         }
-        internal static Node Create(DOMNode Node)
+        internal static Node Create(IDOMNode Node)
         {
             if (Node is IDOMDocument)
                 return Document.Create(Node as IDOMDocument);
@@ -597,7 +597,7 @@ namespace WebKit.DOM
         {
             if (NewChild == null)
                 throw new ArgumentNullException();
-            return Node.Create((node.appendChild(NewChild.node)));
+            return Node.Create(((node as IDOMNode).appendChild((IDOMNode)NewChild.node)));
         }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace WebKit.DOM
         /// <returns>A clone of this node.</returns>
         public Node CloneNode(bool Deep)
         {
-            return Node.Create(node.cloneNode(Deep ? 1 : 0));
+            return Node.Create((node as IDOMNode).cloneNode(Deep ? 1 : 0));
         }
 
         /// <summary>
@@ -617,7 +617,7 @@ namespace WebKit.DOM
         {
             get
             {
-                return node.hasAttributes() != 0;
+                return ((IDOMNode)node).hasAttributes() != 0;
             }
         }
 
@@ -628,7 +628,7 @@ namespace WebKit.DOM
         {
             get
             {
-                return node.hasChildNodes() != 0;
+                return ((IDOMNode)node).hasChildNodes() != 0;
             }
         }
 
@@ -642,7 +642,7 @@ namespace WebKit.DOM
         {
             if (NewChild == null || RefChild == null)
                 throw new ArgumentNullException();
-            return Node.Create(node.insertBefore(NewChild.node, RefChild.node));
+            return Node.Create(((IDOMNode)node).insertBefore((IDOMNode)NewChild.node, (IDOMNode)RefChild.node));
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace WebKit.DOM
         /// <returns>A value indicating whether the nodes are equal.</returns>
         public bool IsEqualNode(Node Node)
         {
-            return node.isEqualNode((DOMNode)Node.GetWebKitObject()) > 0;
+            return ((IDOMNode)node).isEqualNode((IDOMNode)Node.GetWebKitObject()) > 0;
         }
 
         /// <summary>
@@ -662,7 +662,7 @@ namespace WebKit.DOM
         /// <returns>A value indicating whether the nodes are the same.</returns>
         public bool IsSameNode(Node Node)
         {
-            return node.isSameNode((DOMNode)Node.GetWebKitObject()) > 0;
+            return ((IDOMNode)node).isSameNode((IDOMNode)Node.GetWebKitObject()) > 0;
         }
 
         /// <summary>
@@ -673,7 +673,7 @@ namespace WebKit.DOM
         /// <returns>A value indicating whether the specified feature is supported.</returns>
         public bool IsSupported(string Feature, string Version)
         {
-            return node.isSupported(Feature, Version) > 0;
+            return ((IDOMNode)node).isSupported(Feature, Version) > 0;
         }
 
         /// <summary>
@@ -1129,7 +1129,7 @@ namespace WebKit.DOM
         /// <returns>The imported node.</returns>
         public Node ImportNode(Node NodeToImport, bool Deep)
         {
-            return Node.Create(document.importNode((DOMNode)NodeToImport.GetWebKitObject(), Deep ? 1 : 0));
+            return Node.Create(document.importNode((IDOMNode)NodeToImport.GetWebKitObject(), Deep ? 1 : 0));
         }
 
         /// <summary>
@@ -1212,29 +1212,7 @@ namespace WebKit.DOM
             }
         }
 
-        public ElementType Type
-        {
-            get
-            {
-                if (TagName == "IMG")
-                {
-                    return ElementType.Image;
-                }
-                else if (TagName == "BODY")
-                {
-                    return ElementType.Body;
-                }
-                else if (TagName == "DIV")
-                    return ElementType.DIV;
-                else if (TagName == "FORM")
-                    return ElementType.FORM;
-                else if (TagName == "INPUT" || TagName == "TEXTAREA")
-                    return ElementType.Input;
-                else
-                    return ElementType.LinkOrUknown; 
-            }
-        }
-
+        
         internal static Element Create(IDOMElement Element)
         {
             if (Element is IDOMHTMLElement)

@@ -46,13 +46,14 @@ namespace WebKit
         public bool AllowNavigation;
         // so that we can load and display the first page
         public bool AllowInitialNavigation;
+        public WebKitBrowser Owner;
 
-        public WebPolicyDelegate(bool AllowNavigation, bool AllowDownloads, bool AllowNewWindows)
+        public WebPolicyDelegate(bool AllowNavigation, bool AllowDownloads, bool AllowNewWindows, WebKitBrowser owner)
         {
             this.AllowDownloads = AllowDownloads;
             this.AllowNavigation = AllowNavigation;
             this.AllowNewWindows = AllowNewWindows;
-
+            this.Owner = owner;
             AllowInitialNavigation = true;
         }
 
@@ -68,6 +69,7 @@ namespace WebKit
             else
             {
                 listener.use();
+                Owner.tempmimetype = type;
             }
         }
 

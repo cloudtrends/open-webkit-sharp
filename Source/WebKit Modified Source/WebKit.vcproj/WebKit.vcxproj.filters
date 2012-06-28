@@ -10,13 +10,13 @@
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Classes">
-      <UniqueIdentifier>{9a5ef6ec-e1f2-48fa-b204-eb623c7e2afe}</UniqueIdentifier>
+      <UniqueIdentifier>{68178363-5c96-4e63-9b83-969e4a09f373}</UniqueIdentifier>
     </Filter>
     <Filter Include="API">
-      <UniqueIdentifier>{53cae4df-5e32-48f2-b418-6ff69d25c26b}</UniqueIdentifier>
+      <UniqueIdentifier>{b14915a3-8ac2-43b9-971c-b10d901bfca2}</UniqueIdentifier>
     </Filter>
     <Filter Include="WebCoreSupport">
-      <UniqueIdentifier>{eb6f261c-223a-4e3b-b0b2-737acf205740}</UniqueIdentifier>
+      <UniqueIdentifier>{85f84d1c-d5ff-439f-97b4-bcdb02934f6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

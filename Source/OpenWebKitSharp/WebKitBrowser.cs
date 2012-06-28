@@ -69,7 +69,7 @@ namespace WebKit
         internal IntPtr webViewHWND;
 
         private bool disposed = false;
-
+		
         // initialisation and property stuff
         private string initialText = string.Empty;
         private Uri initialUrl = null;
@@ -106,6 +106,7 @@ namespace WebKit
         internal WebResourceLoadDelegate resourcesLoadDelegate;
         internal ResourcesIntercepter resourceIntercepter;
         internal CustomUndoSystem undoManager;
+        internal GlobalPreferences preferences;
 
         #region Extended properties
 
@@ -483,7 +484,11 @@ namespace WebKit
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float PageZoom { get { return WebView.pageSizeMultiplier(); } set { WebView.setPageSizeMultiplier(value); } }
 
-        //public DOMWindow Window { get; internal set; }
+        /// <summary>
+        /// Estimated progress of page loading
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public double EstimatedProgress { get { return WebView.estimatedProgress(); } }
 
         /// <summary>
         /// The current print page settings.
@@ -964,14 +969,14 @@ namespace WebKit
             uiDelegate = new WebUIDelegate(this);
             Marshal.AddRef(Marshal.GetIUnknownForObject(uiDelegate));
 
-            resourcesLoadDelegate = new WebResourceLoadDelegate();
+            resourcesLoadDelegate = new WebResourceLoadDelegate(this);
             Marshal.AddRef(Marshal.GetIUnknownForObject(resourcesLoadDelegate));
             
             //editingDelegate = new WebEditingDelegate(this);
             //Marshal.AddRef(Marshal.GetIUnknownForObject(editingDelegate));
             // not used (yet)
 
-            policyDelegate = new WebPolicyDelegate(AllowNavigation, AllowDownloads, AllowNewWindows);
+            policyDelegate = new WebPolicyDelegate(AllowNavigation, AllowDownloads, AllowNewWindows, this);
             Marshal.AddRef(Marshal.GetIUnknownForObject(policyDelegate));
 
             formDelegate = new WebFormDelegate(this);
@@ -1123,7 +1128,7 @@ namespace WebKit
 
         
 
-        void resourcesLoadDelegate_ResourceFailedLoading(WebURLResponse res, WebError error)
+        void resourcesLoadDelegate_ResourceFailedLoading(IWebURLResponse res, WebError error)
         {
             resourceIntercepter.ResFailed(res, error.localizedDescription());
         }
@@ -1154,17 +1159,17 @@ namespace WebKit
             }
         }
 
-        void resourcesLoadDelegate_ResourceProgress(WebURLResponse res, int length)
+        void resourcesLoadDelegate_ResourceProgress(IWebURLResponse res, int length)
         {
             resourceIntercepter.ResProg(res, length);
         }
 
-        void resourcesLoadDelegate_ResourceLoading(WebURLResponse res)
+        void resourcesLoadDelegate_ResourceLoading(IWebURLResponse res)
         {
             resourceIntercepter.ResStart(res);
         }
 
-        void resourcesLoadDelegate_ResourceLoaded(WebURLResponse res)
+        void resourcesLoadDelegate_ResourceLoaded(IWebURLResponse res)
         {
             resourceIntercepter.ResFinish(res);
         }
@@ -1184,7 +1189,7 @@ namespace WebKit
             try
             {
                 if (element != null && element.GetType().Name != "__ComObject")
-                MouseDidMoveOverElement(this, new MouseDidMoveOverElementEventArgs((Element)Element.Create((DOMNode)element)));
+                MouseDidMoveOverElement(this, new MouseDidMoveOverElementEventArgs((Element)Element.Create(element)));
             }
             catch { }
         }
@@ -1313,7 +1318,7 @@ namespace WebKit
             object el;
 
             WebView.elementAtPoint(ref p).RemoteRead("WebElementDOMNodeKey", out el, null, 0, null);
-            return Node.Create(el as DOMNode);   
+            return Node.Create(el as IDOMNode);   
           
         }
         private string _status = string.Empty;
@@ -1459,7 +1464,6 @@ namespace WebKit
             {
                 StatusTextChanged(this, new WebKitBrowserStatusChangedEventArgs(LanguageLoader.RenderingPage));
                 Navigated(this, new WebBrowserNavigatedEventArgs(this.Url));
-
                 BackgroundWorker favicongetter = new BackgroundWorker();
                 favicongetter.DoWork += new DoWorkEventHandler(favicongetter_DoWork);
                 favicongetter.RunWorkerAsync(new _fav(Url, Document));
@@ -1560,21 +1564,12 @@ namespace WebKit
             { }
             return false;
         }
-
+        internal string tempmimetype = null;
         internal void OnMissingPlugin(IDOMElement el)
         {
             PluginFailed(this, new PluginFailedErrorEventArgs("Plugin missing for element with TagName: " + el.tagName()));
         }
-        //private Icon Base64ToIcon(string base64String)
-        //{
-        //    byte[] imageBytes = Convert.FromBase64String(base64String);
-        //    MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-        //    ms.Write(imageBytes, 0, imageBytes.Length);
-        //    Bitmap img = (Bitmap)Bitmap.FromStream(ms, true);
-        //    Icon ico = Icon.FromHandle(img.GetHicon());
-        //    ms.Dispose();
-        //    return ico;
-        //}
+
         private void frameLoadDelegate_DidStartProvisionalLoadForFrame(WebView WebView, IWebFrame frame)
         { 
             if (frame == webView.mainFrame())
@@ -1586,9 +1581,12 @@ namespace WebKit
                     bw.DoWork += new DoWorkEventHandler(bw_DoWork);
                     HeadersAvailableEventArgs h = new HeadersAvailableEventArgs(new Uri(frame.provisionalDataSource().request().url()), frame.provisionalDataSource().request());
                     bw.RunWorkerAsync(h);
+                    string Url = h.Url.ToString();
+                    
+
                     if (resourceIntercepter != null)
                         resourceIntercepter.Resources.Clear();
-                    WebKitBrowserNavigatingEventArgs args = new WebKitBrowserNavigatingEventArgs(new Uri(url), frame.name());
+                    WebKitBrowserNavigatingEventArgs args = new WebKitBrowserNavigatingEventArgs(new Uri(url), frame.name(), tempmimetype);
                     Navigating(this, args);
                     if (args.Cancel == true)
                     {
@@ -1799,6 +1797,7 @@ namespace WebKit
         public string Username { get; set; }
         public string Password { get; set; }
         #endregion
+
         #region Editing
         public void Undo()
         {
@@ -1824,6 +1823,7 @@ namespace WebKit
                 WebView.copy(WebView);
         }
         #endregion
+
         #region Public Methods
 
         
@@ -1872,14 +1872,73 @@ namespace WebKit
             {
                 ((MyDownloader.App.UI.MainDownloadForm)Application.OpenForms["MainDownloadForm"]).Focus();
                 ((MyDownloader.App.UI.MainDownloadForm)Application.OpenForms["MainDownloadForm"]).downloadList1.NewFileDownload(url, filename, true);
+				((MyDownloader.App.UI.MainDownloadForm)Application.OpenForms["MainDownloadForm"]).Show ();
             }
         }
 
+
+        /// <summary>
+        /// Unmark all text matches when the find method has been used
+        /// </summary>
+        public void UnmarkTextMatches()
+        {
+            WebView.unmarkAllTextMatches();
+        }
         /// <summary>
         /// Navigates to the specified Url.
         /// </summary>
         /// <param name="url">Url to navigate to.</param>
         public void Navigate(string url)
+        {
+            if (loaded)
+            {
+                if (url.StartsWith("javascript::"))
+                {
+#if DEBUG || RELEASE
+                    try
+                    {
+                        GetScriptManager.EvaluateScript(url.Split(Convert.ToChar("::"))[1]);
+                    }
+                    catch (Exception ex) { Error(this, new WebKitBrowserErrorEventArgs("JavaScript execution failed: " + ex.Message)); }
+#else
+                    try
+                    {
+                        StringByEvaluatingJavaScriptFromString(url);
+                    }
+                    catch (Exception ex) { Error(this, new WebKitBrowserErrorEventArgs("JavaScript execution failed: " + ex.Message)); }
+#endif
+                    return;
+                }
+                // prepend with "http://" if url not well formed
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                    url = "http://" + url;
+                else
+                    url = "" + url;
+                activationContext.Activate();
+
+                WebMutableURLRequest request = new WebMutableURLRequest();
+
+                request.setHTTPMethod("GET");
+                
+                request.initWithURL(url, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
+                if (Preferences.IgnoreSSLErrors)
+                    request.setAllowsAnyHTTPSCertificate();
+
+                if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                    request.setValue("Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(string.Format("{0}:{1}", Username, Password))), "Authorization");
+                
+                webView.mainFrame().loadRequest((WebURLRequest)request);
+
+                activationContext.Deactivate();
+            }
+            else
+            {
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                    url = "http://" + url;
+                initialUrl = url.Length == 0 ? null : new Uri(url);
+            }
+        }
+		public void Navigate(string url, System.Collections.Generic.List<Header> Headers)
         {
             if (loaded)
             {
@@ -1913,9 +1972,16 @@ namespace WebKit
                 
                 request.initWithURL(url, _WebURLRequestCachePolicy.WebURLRequestUseProtocolCachePolicy, 60);
                 
+                if (Preferences.IgnoreSSLErrors)
+                    request.setAllowsAnyHTTPSCertificate();
+
                 if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-                    request.setValue("Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(string.Format("{0}:{1}", Username, Password))), "Authorization");
+                    request.setValue("Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(string.Format("{0}:{1}", Username, Password))), "Authorization");
                 
+                foreach(WebKit.Header h in Headers)
+				{
+					request.setValue (h.Value, h.Field);
+				}
                 webView.mainFrame().loadRequest((WebURLRequest)request);
 
                 activationContext.Deactivate();
@@ -2115,7 +2181,13 @@ namespace WebKit
 
         public GlobalPreferences Preferences
         {
-            get { return new GlobalPreferences(this); }
+            get
+            {
+                if (preferences == null)
+                    preferences = new GlobalPreferences(this);
+
+                return preferences;
+            }
         }
         #endregion Public Methods
 

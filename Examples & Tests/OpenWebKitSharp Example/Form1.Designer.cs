@@ -85,6 +85,7 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.fav = new System.Windows.Forms.PictureBox();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -150,7 +151,8 @@
             this.setDefaultCSSToolStripMenuItem,
             this.toolStripSeparator3,
             this.customMenuExampleToolStripMenuItem,
-            this.blockPopupsToolStripMenuItem});
+            this.blockPopupsToolStripMenuItem,
+            this.toolStripMenuItem4});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -634,6 +636,13 @@
             this.fav.TabIndex = 13;
             this.fav.TabStop = false;
             // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(270, 22);
+            this.toolStripMenuItem4.Text = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -729,6 +738,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.PictureBox fav;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
     }
 }
 

@@ -54,6 +54,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Linux|x86'">
+    <OutputPath>bin\x86\Release_Linux\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_Linux|x86'">
+    <OutputPath>bin\x86\Debug_Linux\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenWebKitSharp, Version=2.4.0.2109, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>

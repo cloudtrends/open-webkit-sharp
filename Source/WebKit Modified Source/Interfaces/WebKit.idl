@@ -309,23 +309,35 @@ library WebKit
     coclass WebUserContentURLPattern {
         [default] interface IWebUserContentURLPattern;
     }
+	[uuid(6EB8D98F-2723-4472-88D3-5936F9D6E631)]
+	coclass WebSecurityOrigin
+	{
+		[default] interface IWebSecurityOrigin;
+	}
+	
 	[uuid(A3676398-4485-4a9d-87DC-CB5A40E6351D)]
 	coclass WebFrame {
 		[default] interface IWebFrame;
 		interface IWebFramePrivate;
 		interface IWebDocumentText;
 	}
-	[uuid(6EB8D98F-2723-4472-88D3-5936F9D6E631)]
-	coclass WebSecurityOrigin
-	{
-		[default] interface IWebSecurityOrigin;
-	}
+
 	[uuid(00000000-0000-0000-0000-000000000000)]
-	coclass OpenWwebKitSharpExportedTypes
-	{
+	coclass OpenWebKitSharpExportedTypes {
+		[default] interface IWebUIDelegate2;
 		interface IWebUIDelegatePrivate;
 		interface IWebUIDelegatePrivate2;
 		interface IWebUIDelegatePrivate3;
 		interface IWebUIDelegatePrivate4;
+		interface IWebFrameLoadDelegatePrivate;
+		interface IWebFrameLoadDelegatePrivate2;
+		interface IWebHTTPURLResponse;
+	}
+
+	[uuid(00000000-0000-0000-0000-000000000001)]
+	coclass HTMLTypes
+	{
+		[default] interface IDOMHTMLElement;
+		interface IDOMHTMLFormElement;
 	}
 }

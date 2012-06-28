@@ -36,10 +36,10 @@ using WebKit.Interop;
 namespace WebKit
 {
     internal delegate void PluginFailedWithError(WebView sender, WebError error);
-    internal delegate void ResourceStartedLoading(WebURLResponse res);
-    internal delegate void ResourceFinishedLoading(WebURLResponse res);
-    internal delegate void ResourceSizeAvailableEventHandler(WebURLResponse res, int length);
-    internal delegate void ResourceFailed(WebURLResponse res, WebError error);
+    internal delegate void ResourceStartedLoading(IWebURLResponse res);
+    internal delegate void ResourceFinishedLoading(IWebURLResponse res);
+    internal delegate void ResourceSizeAvailableEventHandler(IWebURLResponse res, int length);
+    internal delegate void ResourceFailed(IWebURLResponse res, WebError error);
     internal delegate string ResourceRequest(string url);
     internal class WebResourceLoadDelegate : IWebResourceLoadDelegate
     {
@@ -49,14 +49,21 @@ namespace WebKit
         public event ResourceStartedLoading ResourceLoading = delegate { };
         public event ResourceRequest ResourceRequestSent;
         public event ResourceFailed ResourceFailedLoading = delegate { };
-        private Dictionary<uint, WebURLResponse> resources = new Dictionary<uint, WebURLResponse>();
+        public WebKitBrowser Owner { get; set; }
+        private Dictionary<uint, IWebURLResponse> resources = new Dictionary<uint, IWebURLResponse>();
+
+        public WebResourceLoadDelegate(WebKitBrowser o)
+        {
+            Owner = o;
+        }
+        
         public void didCancelAuthenticationChallenge(WebView WebView, uint identifier, IWebURLAuthenticationChallenge challenge, IWebDataSource dataSource)
         {
         }
 
         public void didFailLoadingWithError(WebView WebView, uint identifier, WebError error, IWebDataSource dataSource)
         {
-            WebURLResponse resp = null;
+            IWebURLResponse resp = null;
             resources.TryGetValue(identifier, out resp);
             if (resp != null)
                ResourceFailedLoading(resources[identifier], error);
@@ -89,6 +96,8 @@ namespace WebKit
 
         public void identifierForInitialRequest(WebView WebView, IWebURLRequest request, IWebDataSource dataSource, uint identifier)
         {
+            if (Owner.preferences.IgnoreSSLErrors)
+                request.mutableCopy().setAllowsAnyHTTPSCertificate();
         }
 
         public void plugInFailedWithError(WebView WebView, WebError error, IWebDataSource dataSource)
@@ -96,9 +105,11 @@ namespace WebKit
             PluginFailed(WebView, error);
         }
 
-        public IWebURLRequest willSendRequest(WebView WebView, uint identifier, IWebURLRequest request, WebURLResponse redirectResponse, IWebDataSource dataSource)
+        public IWebURLRequest willSendRequest(WebView WebView, uint identifier, IWebURLRequest request, IWebURLResponse redirectResponse, IWebDataSource dataSource)
         {
             string ret = ResourceRequestSent(request.url());
+            if (Owner.preferences.IgnoreSSLErrors)
+                request.mutableCopy().setAllowsAnyHTTPSCertificate();
             if (string.IsNullOrEmpty(ret))
             {
                 return null;
@@ -122,8 +133,10 @@ namespace WebKit
         {
         }
 
-        public WebURLRequest willSendRequest(WebView WebView, uint identifier, WebURLRequest request, WebURLResponse redirectResponse, IWebDataSource dataSource)
+        public IWebURLRequest willSendRequest(WebView WebView, uint identifier, IWebURLRequest request, WebURLResponse redirectResponse, IWebDataSource dataSource)
         {
+            if (Owner.preferences.IgnoreSSLErrors)
+                request.mutableCopy().setAllowsAnyHTTPSCertificate();
             return request; 
         }
     }

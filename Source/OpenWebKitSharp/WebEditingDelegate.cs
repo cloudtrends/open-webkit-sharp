@@ -89,7 +89,7 @@ namespace WebKit
             throw new NotImplementedException();
         }
 
-        public void shouldInsertNode(WebView WebView, DOMNode node, IDOMRange range, _WebViewInsertAction action)
+        public void shouldInsertNode(WebView WebView, IDOMNode node, IDOMRange range, _WebViewInsertAction action)
         {
             throw new NotImplementedException();
         }

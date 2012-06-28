@@ -8,9 +8,7 @@ using System.Windows.Forms;
 using WebKit;
 using WebKit.DOM;
 using WebKit.Interop;
-#if DEBUG || RELEASE
-using WebKit.JSCore;
-#endif
+
 namespace OpenWebKitSharp_Test
 {
     public partial class Form1 : Form
@@ -23,7 +21,6 @@ namespace OpenWebKitSharp_Test
         private void webKitBrowser1_CloseWindowRequest(object sender, EventArgs e)
         {
             tabControl1.Controls.Remove((sender as WebKitBrowser).Parent);
-            
         }
 
         private void webKitBrowser1_DangerousSiteDetected(object sender, EventArgs e)
@@ -51,7 +48,6 @@ namespace OpenWebKitSharp_Test
             ((Form)((WebKitBrowser)sender).Parent).Icon = e.Favicon;
         }
 
-
         private void webKitBrowser1_StatusTextChanged(object sender, WebKit.WebKitBrowserStatusChangedEventArgs e)
         {
             if (sender.Equals(webKitBrowser1))
@@ -62,7 +58,7 @@ namespace OpenWebKitSharp_Test
         {
             urlBar.AutoCompleteCustomSource.Add(e.Url.ToString());
             if (sender.Equals(webKitBrowser1))
-            urlBar.Text = e.Url.ToString();
+                urlBar.Text = e.Url.ToString();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -276,7 +272,7 @@ namespace OpenWebKitSharp_Test
         private void button7_Click(object sender, EventArgs e)
         {
             panel2.Visible = false;
-            webKitBrowser1.WebView.unmarkAllTextMatches();
+            webKitBrowser1.UnmarkTextMatches();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -543,6 +539,11 @@ namespace OpenWebKitSharp_Test
         private void removeTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tabControl1.Controls.Remove(tabControl1.SelectedTab);
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

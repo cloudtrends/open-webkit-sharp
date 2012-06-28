@@ -33,23 +33,7 @@ namespace WebKit
             }
         }
 
-        public bool IgnoreSSLErrors
-        {
-            get
-            {
-                if (Environment.GetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS") != null)
-                    return Convert.ToBoolean(Environment.GetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS"));
-                else
-                {
-                    Environment.SetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS", "0");
-                    return false;
-                }
-            }
-            set
-            {
-                Environment.SetEnvironmentVariable("WEBKIT_IGNORE_SSL_ERRORS", Convert.ToInt32(value).ToString());
-            }
-        }
+        public bool IgnoreSSLErrors { get; set; }
 
         public bool EnableDNSPrefetching
         {

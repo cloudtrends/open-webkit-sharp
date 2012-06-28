@@ -55,15 +55,15 @@ namespace WebKit
     internal class WebUIDelegate : IWebUIDelegate, IWebUIDelegatePrivate, IWebUIDelegatePrivate2, IWebUIDelegatePrivate3, IWebUIDelegatePrivate4 
     {
         public event CreateWebViewWithRequestEvent CreateWebViewWithRequest;
-        public event StatusTextChangedEvent StatusTextChanged;
-        public event CloseWindowRequest CloseWindowRequest;
+        public event StatusTextChangedEvent StatusTextChanged = delegate { };
+        public event CloseWindowRequest CloseWindowRequest = delegate { };
         public event RunJavaScriptPromptBeforeUnload RunJavaScriptPromptBeforeUnload;
         public event RunJavaScriptAlertPanelWithMessageEvent RunJavaScriptAlertPanelWithMessage;
         public event RunJavaScriptConfirmPanelWithMessageEvent RunJavaScriptConfirmPanelWithMessage;
         public event RunJavaScriptTextInputPanelWithPromptEvent RunJavaScriptTextInputPanelWithPrompt;
-        public event MouseDidMoveOverElement MouseDidMoveOverElement;
+        public event MouseDidMoveOverElement MouseDidMoveOverElement = delegate { };
         public event AllowGeolocationRequest GeolocationReq;
-        public event AddMessage AddMessageToConsole;
+        public event AddMessage AddMessageToConsole = delegate { };
         private WebKitBrowser owner;
 
         public WebUIDelegate(WebKitBrowser browser)
@@ -223,7 +223,7 @@ namespace WebKit
             elementInformation.RemoteRead("WebElementDOMNodeKey", out el, null, 0, null);
                 if (el is IDOMElement || el is IDOMHTMLElement || el is IDOMHTMLTextAreaElement || el is IDOMHTMLInputElement)
                 {
-                    owner._el = (Element)Element.Create(el as DOMNode);
+                    owner._el = (Element)Node.Create(el as IDOMNode);
                 }
             MouseDidMoveOverElement(sender, el as IDOMNode);
         }

@@ -180,14 +180,16 @@ namespace WebKit
     }
     public class WebKitBrowserNavigatingEventArgs : CancelEventArgs
     {
-        public WebKitBrowserNavigatingEventArgs(Uri url, string targetFrameName)
+        public WebKitBrowserNavigatingEventArgs(Uri url, string targetFrameName, string mime)
         {
             this.Url = url;
             this.TargetFrameName = targetFrameName;
+            this.MimeType = mime;
             this.Cancel = false;
         }
         
         public string TargetFrameName { get; internal set;  }
+        public string MimeType { get; internal set; }
         public Uri Url { get; internal set; }
     }
 

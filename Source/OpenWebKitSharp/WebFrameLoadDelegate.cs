@@ -83,7 +83,7 @@ namespace WebKit
 
         public void didCommitLoadForFrame(WebView WebView, webFrame frame)
         {
-            DidCommitLoadForFrame(WebView, frame);
+            DidCommitLoadForFrame(WebView, frame); 
         }
 
         public void didFailLoadWithError(WebView WebView, WebError error, webFrame forFrame)

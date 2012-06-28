@@ -32,7 +32,9 @@ namespace WebKit
         public JSManagement(WebKitBrowser browser)
         {
             _owner = browser;
-            ScriptObject = new JSCore.JSContext(browser.WebView.mainFrame());
+            IWebFrame fe = (IWebFrame)browser.webView.mainFrame();
+
+            ScriptObject = new JSCore.JSContext(fe);
             browser.uiDelegate.AddMessageToConsole += new AddMessage(uiDelegate_AddMessageToConsole);
         }
 
@@ -46,9 +48,9 @@ namespace WebKit
         /// </summary>
         public JSCore.JSContext GlobalContext
         {
-            get 
+            get
             {
-                return new JSCore.JSContext(_owner.WebView.mainFrame());
+                return new JSCore.JSContext((IWebFrame)_owner.WebView.mainFrame());
             }
         }
 

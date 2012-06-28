@@ -35,13 +35,13 @@ namespace WebKit
             this.MimeType = resource.mimeType();
             this.Encoding = resource.textEncodingName();
         }
-        public WebKitResource(WebURLResponse res, int size)
+        public WebKitResource(IWebURLResponse res, int size)
         {
             this.Url = res.url();
             this.MimeType = res.mimeType();
             this.Encoding = res.textEncodingName();
         }
-        public WebKitResource(WebURLResponse res)
+        public WebKitResource(IWebURLResponse res)
         {
             this.Url = res.url();
             this.MimeType = res.mimeType();
@@ -52,7 +52,7 @@ namespace WebKit
     {
         public WebKitResource Resource { get; internal set; }
         public string ErrorDescription { get; internal set; }
-        public WebKitResourceErrorEventArgs(WebURLResponse res, string error)
+        public WebKitResourceErrorEventArgs(IWebURLResponse res, string error)
         {
             this.Resource = new WebKitResource(res);
             this.ErrorDescription = error;
@@ -61,7 +61,7 @@ namespace WebKit
     public class WebKitResourcesEventArgs : EventArgs
     {
         public WebKitResource Resource { get; internal set; }
-        public WebKitResourcesEventArgs(WebURLResponse res)
+        public WebKitResourcesEventArgs(IWebURLResponse res)
         {
             this.Resource = new WebKitResource(res);
         }
@@ -70,7 +70,7 @@ namespace WebKit
     {
         public WebKitResource Resource { get; internal set; }
         public int Received { get; internal set; }
-        public WebKitLoadingResourceEventArgs(WebURLResponse res, int length)
+        public WebKitLoadingResourceEventArgs(IWebURLResponse res, int length)
         {
             this.Resource = new WebKitResource(res);
             this.Received = length;
@@ -105,7 +105,7 @@ namespace WebKit
             this.Owner = browser;
             Resources = new List<WebKitResource>();
         }
-        internal void ResFailed(WebURLResponse res, string des)
+        internal void ResFailed(IWebURLResponse res, string des)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace WebKit
             }
             catch { }
         }
-        internal void ResStart(WebURLResponse res)
+        internal void ResStart(IWebURLResponse res)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace WebKit
             }
             catch { }
         }
-        internal void ResFinish(WebURLResponse res)
+        internal void ResFinish(IWebURLResponse res)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace WebKit
             }
             catch { }
         }
-        internal void ResProg(WebURLResponse res, int r)
+        internal void ResProg(IWebURLResponse res, int r)
         {
                 if (Owner.WebView != null)
                     ResourceSizeAvailableEvent(this, new WebKitLoadingResourceEventArgs(res, r));

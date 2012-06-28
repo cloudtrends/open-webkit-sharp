@@ -50,10 +50,10 @@ namespace WebKit
     internal delegate void DidFinishEvent(WebDownload download);
     internal delegate void DidReceiveAuthenticationChallengeEvent(WebDownload download, IWebURLAuthenticationChallenge challenge);
     internal delegate void DidReceiveDataOfLengthEvent(WebDownload download, uint length);
-    internal delegate void DidReceiveResponseEvent(WebDownload download, WebURLResponse response);
+    internal delegate void DidReceiveResponseEvent(WebDownload download, IWebURLResponse response);
     internal delegate int ShouldDecodeSourceDataOfMIMETypeEvent(WebDownload download, string encodingType);
-    internal delegate void WillResumeWithResponseEvent(WebDownload download, WebURLResponse response, long fromByte);
-    internal delegate void WillSendRequestEvent(WebDownload download, WebMutableURLRequest request, WebURLResponse redirectResponse, out WebMutableURLRequest finalRequest);
+    internal delegate void WillResumeWithResponseEvent(WebDownload download, IWebURLResponse response, long fromByte);
+    internal delegate void WillSendRequestEvent(WebDownload download, WebMutableURLRequest request, IWebURLResponse redirectResponse, out WebMutableURLRequest finalRequest);
 
     internal class WebDownloadDelegate : IWebDownloadDelegate
     {
