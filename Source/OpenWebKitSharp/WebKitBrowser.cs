@@ -2133,6 +2133,7 @@ namespace WebKit
         public void ShowPageSetupDialog()
         {
             WebBrowser br = new WebBrowser();
+            br.ScriptErrorsSuppressed = true;
             br.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(br_DocumentCompleted);
             br.Tag = "PageSetup";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);
@@ -2145,6 +2146,7 @@ namespace WebKit
         public void ShowPrintDialog()
         {
             WebBrowser br = new WebBrowser();
+            br.ScriptErrorsSuppressed = true;
             br.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(br_DocumentCompleted);
             br.Tag = "PrintDlg";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);
@@ -2154,6 +2156,10 @@ namespace WebKit
         void br_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             WebBrowser s = (sender as WebBrowser);
+            foreach (HtmlElement el in s.Document.GetElementsByTagName("img"))
+                if ((el.GetAttribute("src").StartsWith("http") == false))
+                   el.SetAttribute("src", "http://" + s.Url.Host + el.GetAttribute("src").Replace("..", ""));
+            
             string c =  ((string)s.Tag);
             if (c == "PrintDlg")
                 s.ShowPrintDialog();
@@ -2164,7 +2170,8 @@ namespace WebKit
             if (c == "PageSetup")
                 s.ShowPageSetupDialog();
             s.Dispose();
-            File.Delete(Application.StartupPath + @"\owstemp.html");
+            if (File.Exists(Application.StartupPath + @"\owstemp.html"))
+                File.Delete(Application.StartupPath + @"\owstemp.html");
         }
 
         /// <summary>
@@ -2173,6 +2180,7 @@ namespace WebKit
         public void ShowPrintPreviewDialog()
         {
             WebBrowser br = new WebBrowser();
+            br.ScriptErrorsSuppressed = true;
             br.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(br_DocumentCompleted);
             br.Tag = "PrintPreviewDlg";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);

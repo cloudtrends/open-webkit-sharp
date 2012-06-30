@@ -294,9 +294,7 @@
     <Compile Include="WebResourceLoadDelegate.cs" />
     <Compile Include="WebUIDelegate.cs" />
     <Compile Include="Linux %28GTK%29\GTKApp.cs" />
-    <Compile Include="Linux %28GTK%29\LinuxWebKitBrowser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Linux %28GTK%29\LinuxWebKitBrowser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Downloader\UI\NewDownloadDialog.resx">

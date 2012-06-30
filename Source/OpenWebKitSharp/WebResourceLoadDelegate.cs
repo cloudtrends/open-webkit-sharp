@@ -96,7 +96,7 @@ namespace WebKit
 
         public void identifierForInitialRequest(WebView WebView, IWebURLRequest request, IWebDataSource dataSource, uint identifier)
         {
-            if (Owner.preferences.IgnoreSSLErrors)
+            if (Owner.Preferences.IgnoreSSLErrors)
                 request.mutableCopy().setAllowsAnyHTTPSCertificate();
         }
 
@@ -108,7 +108,7 @@ namespace WebKit
         public IWebURLRequest willSendRequest(WebView WebView, uint identifier, IWebURLRequest request, IWebURLResponse redirectResponse, IWebDataSource dataSource)
         {
             string ret = ResourceRequestSent(request.url());
-            if (Owner.preferences.IgnoreSSLErrors)
+            if (Owner.Preferences.IgnoreSSLErrors)
                 request.mutableCopy().setAllowsAnyHTTPSCertificate();
             if (string.IsNullOrEmpty(ret))
             {

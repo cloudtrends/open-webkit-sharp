@@ -1,0 +1,73 @@
+﻿Build started 28/6/2012 1:37:00 μμ.
+     1>Project "C:\OpenWebKitSharp\Source\WebKit Modified Source\WebKit.vcproj\Interfaces.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Interfaces.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       Midl:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\midl.exe /I\obj\WebKit\DerivedSources /I..\Interfaces /IRelease\include /W1 /nologo /char signed /env win32 /out"\obj\WebKit\Interfaces\\" /h "IWebDesktopNotificationsDelegate_h.h" /tlb "\lib\WebKit.tlb" ..\Interfaces\IWebDesktopNotificationsDelegate.idl 
+         Processing ..\Interfaces\IWebDesktopNotificationsDelegate.idl
+         IWebDesktopNotificationsDelegate.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.idl
+         oaidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\objidl.idl
+         objidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\unknwn.idl
+         unknwn.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\wtypes.idl
+         wtypes.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\basetsd.h
+         basetsd.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\guiddef.h
+         guiddef.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.idl
+         ocidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oleidl.idl
+         oleidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\servprov.idl
+         servprov.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\urlmon.idl
+         urlmon.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\msxml.idl
+         msxml.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.acf
+         oaidl.acf
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.acf
+         ocidl.acf
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\midl.exe /I\obj\WebKit\DerivedSources /I..\Interfaces /IRelease\include /W1 /nologo /char signed /env win32 /out"\obj\WebKit\Interfaces\\" /h "WebKit_h.h" /tlb "\lib\WebKit.tlb" ..\Interfaces\WebKit.idl 
+         Processing ..\Interfaces\WebKit.idl
+         WebKit.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.idl
+         oaidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\objidl.idl
+         objidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\unknwn.idl
+         unknwn.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\wtypes.idl
+         wtypes.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\basetsd.h
+         basetsd.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\guiddef.h
+         guiddef.h
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.idl
+         ocidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oleidl.idl
+         oleidl.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\servprov.idl
+         servprov.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\urlmon.idl
+         urlmon.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\msxml.idl
+         msxml.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oleacc.idl
+         oleacc.idl
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\oaidl.acf
+         oaidl.acf
+         Processing C:\Program Files\Microsoft SDKs\Windows\v7.0A\include\ocidl.acf
+         ocidl.acf
+       FinalizeBuildStatus:
+         Deleting file "Release\Interfaces.unsuccessfulbuild".
+         Touching "Release\Interfaces.lastbuildstate".
+     1>Done Building Project "C:\OpenWebKitSharp\Source\WebKit Modified Source\WebKit.vcproj\Interfaces.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.43
