@@ -22,7 +22,7 @@ namespace WebKit
         private static string _WebKitPath = System.Windows.Forms.Application.StartupPath;
         internal WebKitBrowser browser;
         internal static bool HasRunTerminal = false;
-        internal WebPreferencesClass preferences { get { return (WebPreferencesClass)browser.WebView.preferences(); } set { } }
+        internal WebPreferencesClass preferences { get { return (WebPreferencesClass)browser.WebView.preferences(); } }
         public bool EnableWebKitWebSecurity
         {
             get { return _enableWebSecurity; }
@@ -40,10 +40,10 @@ namespace WebKit
             get { return _dnsprefetch; }
             set { browser.Preferences.preferences.setDNSPrefetchingEnabled(Convert.ToInt32(value)); _dnsprefetch = value; }
         }
-        public GlobalPreferences(WebKitBrowser browser)
+        public GlobalPreferences(WebKitBrowser Browser)
         {
             WebKitBrowser.activationContext.Activate();
-            this.browser = browser;
+            this.browser = Browser;
             WebKitBrowser.activationContext.Deactivate();
         }
         public static string WebKitPath

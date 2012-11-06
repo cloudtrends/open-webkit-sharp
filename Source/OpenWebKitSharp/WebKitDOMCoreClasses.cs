@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using WebKit.Interop;
 
@@ -67,6 +68,10 @@ namespace WebKit.DOM
         internal static NamedNodeMap Create(IDOMNamedNodeMap NamedNodeMap)
         {
             return new NamedNodeMap(NamedNodeMap);
+        }
+        public void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(namedNodeMap);
         }
 
         #region NamedNodeMap Object Properties
@@ -280,7 +285,7 @@ namespace WebKit.DOM
     /// <summary>
     /// Represents a DOM Node.
     /// </summary>
-    public class Node : NodeEventTarget 
+    public class Node : NodeEventTarget, IDisposable 
     {
         private IDOMNode node;
         /// <summary>
@@ -292,6 +297,14 @@ namespace WebKit.DOM
             return node;
         }
 
+        public virtual void ReleaseCOMObject()
+        {
+            if (node != null)
+            {
+                Marshal.ReleaseComObject(node);
+                node = null;
+            }
+        }
         /// <summary>
         /// Node Constructor.
         /// </summary>
@@ -495,16 +508,6 @@ namespace WebKit.DOM
             }
         }
 
-        /// <summary>
-        /// Gets the type of this node.
-        /// </summary>
-        public NodeType NodeType
-        {
-            get
-            {
-                return (NodeType)node.nodeType();
-            }
-        }
 
         /// <summary>
         /// Gets or sets the value of this node.
@@ -518,6 +521,17 @@ namespace WebKit.DOM
             set
             {
                 node.setNodeValue(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the type of this node.
+        /// </summary>
+        public NodeType NodeType
+        {
+            get
+            {
+                return (NodeType)node.nodeType();
             }
         }
 
@@ -702,6 +716,14 @@ namespace WebKit.DOM
         }
 
         #endregion
+
+        public virtual void Dispose()
+        {
+            ReleaseCOMObject();
+            Listener.Dispose();
+            node = null;
+            GC.Collect();
+        }
     }
 
     /// <summary>
@@ -726,6 +748,11 @@ namespace WebKit.DOM
             return new Attr(Attr);
         }
 
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(attr);
+            base.ReleaseCOMObject();
+        }
         #region Attr Object Properties
 
         /// <summary>
@@ -768,7 +795,12 @@ namespace WebKit.DOM
             else
                 return new CharacterData(CharacterData);
         }
-
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(characterData);
+            characterData = null;
+            base.ReleaseCOMObject();
+        }
         #region CharacterData Object Properties
 
         /// <summary>
@@ -876,6 +908,12 @@ namespace WebKit.DOM
         {
             return new Comment(Comment);
         }
+
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(comment);
+            base.ReleaseCOMObject();
+        }
     }
 
     /// <summary>
@@ -902,7 +940,11 @@ namespace WebKit.DOM
             else
                 return new Text(Text);
         }
-
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(text);
+            base.ReleaseCOMObject();
+        }
         /// <summary>
         /// Splits the text node into two nodes at the specified offset.
         /// </summary>
@@ -931,6 +973,11 @@ namespace WebKit.DOM
             this.cdataSection = CDATASection;
         }
 
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(cdataSection);
+            base.ReleaseCOMObject();
+        }
         internal static CDATASection Create(IDOMCDATASection CDATASection)
         {
             return new CDATASection(CDATASection);
@@ -959,85 +1006,20 @@ namespace WebKit.DOM
             return new Document(Document);
         }
 
-        #region Document Object Properties
-
-        
-        /// <summary>
-        /// Gets the Document Type Declaration associated with the document.
-        /// </summary>
-        public DocumentType DocType
-        {
-            get
-            {
-                return DocumentType.Create(document.doctype());
-            }
-        }
-
-        /// <summary>
-        /// Gets the DOM Implementation object that handles this document.
-        /// </summary>
-        public DocumentImpl Implementation
-        {
-            get
-            {
-                return DocumentImpl.Create(document.implementation());
-            }
-        }
-
-        #endregion
 
         #region Document Object Methods
 
-        /// <summary>
-        /// Creates an attribute node with the specified name.
-        /// </summary>
-        /// <param name="Name">Name of the attribute.</param>
-        /// <returns>The new attribute node.</returns>
-        public Attr CreateAttribute(string Name)
+        public override void Dispose()
         {
-            return Attr.Create(document.createAttribute(Name));
+            foreach (Node e in Elements())
+                e.Dispose();
+            base.Dispose();
         }
-
-        /// <summary>
-        /// Cretaes an attribute node with the specified name and namespace.
-        /// </summary>
-        /// <param name="NamespaceURI">Namespace name of the attribute.</param>
-        /// <param name="Name">Name of the attribute.</param>
-        /// <returns>The new attribute node.</returns>
-        public Attr CreateAttributeNS(string NamespaceURI, string Name)
+        public override void ReleaseCOMObject()
         {
-            return Attr.Create(document.createAttributeNS(NamespaceURI, Name));
+            Marshal.ReleaseComObject(document);
+            base.ReleaseCOMObject();
         }
-
-        /// <summary>
-        /// Creates a comment node with the specified data.
-        /// </summary>
-        /// <param name="Data">Comment data.</param>
-        /// <returns>The new comment node.</returns>
-        public Comment CreateComment(string Data)
-        {
-            return Comment.Create(document.createComment(Data));
-        }
-
-        /// <summary>
-        /// Creates a CDATA section node with the specified data.
-        /// </summary>
-        /// <param name="Data">CDATA section data.</param>
-        /// <returns>The new CDATA section node.</returns>
-        public CDATASection CreateCDATASection(string Data)
-        {
-            return CDATASection.Create(document.createCDATASection(Data));
-        }
-
-        /// <summary>
-        /// Creates an empty document fragment object.
-        /// </summary>
-        /// <returns>The new document fragment.</returns>
-        public DocumentFragment CreateDocumentFragment()
-        {
-            return DocumentFragment.Create(document.createDocumentFragment());
-        }
-
         /// <summary>
         /// Creates a DOM Element with the specified tag name.
         /// </summary>
@@ -1059,36 +1041,6 @@ namespace WebKit.DOM
             return Element.Create(document.createElementNS(NamespaceURI, QualifiedName));
         }
 
-        /// <summary>
-        /// Creates an entity reference object with the specified name.
-        /// </summary>
-        /// <param name="Name">Name of the entity reference object.</param>
-        /// <returns>The new entity reference object.</returns>
-        public EntityReference CreateEntityReference(string Name)
-        {
-            return EntityReference.Create(document.createEntityReference(Name));
-        }
-
-        /// <summary>
-        /// Creates a processing instruction object with the specified target and data.
-        /// </summary>
-        /// <param name="Target">Target of the processing instruction.</param>
-        /// <param name="Data">Data of the processing instruction.</param>
-        /// <returns>The new processing instruction object.</returns>
-        public ProcessingInstruction CreateProcessingInstruction(string Target, string Data)
-        {
-            return ProcessingInstruction.Create(document.createProcessingInstruction(Target, Data));
-        }
-
-        /// <summary>
-        /// Creates a text node containing the specified textual data.
-        /// </summary>
-        /// <param name="Data">Textual data for the node.</param>
-        /// <returns>The new node.</returns>
-        public Text CreateTextNode(string Data)
-        {
-            return Text.Create(document.createTextNode(Data));
-        }
 
         /// <summary>
         /// Returns the first element with the specified id.
@@ -1182,7 +1134,12 @@ namespace WebKit.DOM
             }
         }
 
-
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(element);
+            element = null;
+            base.ReleaseCOMObject();
+        }
         /// <summary>
         /// Gets or sets the Inner Text of the current element.
         /// </summary>
@@ -1223,16 +1180,6 @@ namespace WebKit.DOM
 
         #region Element Object Properties
 
-        /// <summary>
-        /// Gets a NamedNodeMap of attributes for the element.
-        /// </summary>
-        public NamedNodeMap Attributes
-        {
-            get
-            {
-                return NamedNodeMap.Create(element.attributes());
-            }
-        }
         /// <summary>
         /// Gets a NamedNodeMap of attributes for the element.
         /// </summary>
@@ -1438,7 +1385,12 @@ namespace WebKit.DOM
             return new NodeList(NodeList);
         }
 
-        
+        public void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(nodeList);
+            for (int i = 0; i < Length; i++)
+                GetItem(i).ReleaseCOMObject();
+        }
 
         /// <summary>
         /// Gets the number of nodes in the collection.
@@ -1619,7 +1571,10 @@ namespace WebKit.DOM
         {
             return new DocumentImpl(Implementation);
         }
-
+        public void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(implementation);
+        }
         #region DocumentImpl Object Methods
 
         /// <summary>
@@ -1681,6 +1636,11 @@ namespace WebKit.DOM
         {
             return new DocumentFragment(DocumentFragment);
         }
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(documentFragment);
+            base.ReleaseCOMObject();
+        }
     }
 
     /// <summary>
@@ -1703,6 +1663,11 @@ namespace WebKit.DOM
         internal static EntityReference Create(IDOMEntityReference EntityReference)
         {
             return new EntityReference(EntityReference);
+        }
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(entityReference);
+            base.ReleaseCOMObject();
         }
     }
 
@@ -1727,7 +1692,11 @@ namespace WebKit.DOM
         {
             return new ProcessingInstruction(ProcessingInstruction);
         }
-
+        public override void ReleaseCOMObject()
+        {
+            Marshal.ReleaseComObject(processingInstruction);
+            base.ReleaseCOMObject();
+        }
         #region ProcessingInstruction Object Properties
 
         /// <summary>

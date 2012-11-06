@@ -82,7 +82,10 @@ namespace WebKit
             if (disposed)
                 throw new ObjectDisposedException(this.ToString());
             if (!Initialized)
-                throw new InvalidOperationException(LanguageLoader.ActivationContextInitError);
+            {
+                Initialize();
+                Activate();
+            } 
             if (!Activated)
             {
                 lastCookie = 0;

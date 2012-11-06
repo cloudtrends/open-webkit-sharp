@@ -24,6 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System.Runtime.InteropServices;
 namespace WebKit
 {
     partial class WebKitBrowser
@@ -41,6 +42,13 @@ namespace WebKit
         {
             if (!disposed)
             {
+                try
+                {
+                    Document.Dispose();
+                }
+                catch { }
+                webView.close();
+                Marshal.Release(webViewHWND);
                 if (disposing && (components != null))
                 {
                     components.Dispose();

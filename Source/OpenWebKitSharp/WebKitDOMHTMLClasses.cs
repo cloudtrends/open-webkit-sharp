@@ -36,17 +36,103 @@ namespace WebKit.DOM
     /// </summary>
     public class HTMLDocument : Document
     {
+        internal IDOMHTMLDocument doc;
         /// <summary>
         /// HTMLDocument constructor.
         /// </summary>
         /// <param name="Document">WebKit IDOMHTMLDocument object.</param>
-        protected HTMLDocument(IDOMDocument Document)
-            : base(Document)
+        protected HTMLDocument(IDOMHTMLDocument Document)
+            : base((IDOMDocument)Document)
         {
-            
+            doc = Document;
+        }
+        internal static HTMLDocument Create(IDOMHTMLDocument document)
+        {
+            return new HTMLDocument(document);
+        }
+        public string Cookie
+        {
+            get { return doc.cookie(); }
+            set { doc.setCookie(value); }
+        }
+        public string Referrer
+        {
+            get { return doc.referrer(); }
+        }
+        public void Close()
+        {
+            doc.close();
+        }
+        public void Open()
+        {
+            doc.open();
+        }
+        public void Normalize()
+        {
+            doc.normalize();
+        }
+        public void Write(string text)
+        {
+            doc.Write(text);
+        }
+        public HTMLCollection Images
+        {
+            get { return new HTMLCollection(doc.images()); }
+        }
+
+        public HTMLCollection Anchors
+        {
+            get { return new HTMLCollection(doc.anchors()); }
+        }
+
+        public HTMLCollection Applets
+        {
+            get { return new HTMLCollection(doc.applets()); }
+        }
+        public HTMLCollection Links
+        {
+            get { return new HTMLCollection(doc.links()); }
+        }
+        public string Domain
+        {
+            get { return doc.Domain(); }
+        }
+        public string Title
+        {
+            get { return doc.title(); }
+            set { doc.setTitle(value); }
+        }
+        public HTMLElement Body
+        {
+            get { return HTMLElement.Create((IDOMHTMLElement)doc.body()); }
         }
     }
 
+    public class HTMLCollection
+    {
+        internal IDOMHTMLCollection collection;
+        internal HTMLCollection(IDOMHTMLCollection coll)
+        {
+            collection = coll;
+        }
+
+        public Node GetItemAt(int index)
+        {
+            if (index > collection.length())
+                throw new IndexOutOfRangeException();
+            return Node.Create(collection.item(Convert.ToUInt32(index)));
+        }
+
+        public Node GetItemByName(string name)
+        {
+            return Node.Create(collection.namedItem(name));
+        }
+
+        public int Length
+        {
+            get { return Convert.ToInt32(collection.length()); }
+        }
+    }
     /// <summary>
     /// Represents an HTML Element
     /// </summary>
@@ -67,6 +153,18 @@ namespace WebKit.DOM
         internal static HTMLElement Create(IDOMHTMLElement HTMLElement)
         {
             return new HTMLElement(HTMLElement);
+        }
+
+        public string InnerHTML
+        {
+            get { return htmlElement.innerHTML(); }
+            set { htmlElement.setInnerHTML(value); }
+        }
+
+        public string InnerText
+        {
+            get { return htmlElement.innerText(); }
+            set { htmlElement.setInnerText(value); }
         }
     }
 }

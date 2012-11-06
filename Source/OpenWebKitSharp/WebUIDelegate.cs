@@ -38,6 +38,7 @@ using System.Drawing.Printing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using WebKit.DOM;
+using System.Runtime.InteropServices;
 
 namespace WebKit
 {
@@ -219,13 +220,32 @@ namespace WebKit
                 StatusTextChanged(string.Empty);
                 owner.StatusText = string.Empty;
             }
+            textcontent = null;
             object el;
             elementInformation.RemoteRead("WebElementDOMNodeKey", out el, null, 0, null);
-                if (el is IDOMElement || el is IDOMHTMLElement || el is IDOMHTMLTextAreaElement || el is IDOMHTMLInputElement)
-                {
-                    owner._el = (Element)Node.Create(el as IDOMNode);
-                }
-            MouseDidMoveOverElement(sender, el as IDOMNode);
+            if (el == null)
+            {
+                owner.setCurElSafe(null);
+                return;
+            }
+            IDOMNode node = el as IDOMNode;
+            if (node is IDOMElement || node is IDOMHTMLElement || node is IDOMHTMLTextAreaElement || node is IDOMHTMLInputElement && node != null)
+            {
+                owner.setCurElSafe(node);
+                MouseDidMoveOverElement(sender, node);
+            }
+            else
+            {
+                el = null;
+                node = null;
+                GC.Collect();
+            }
+            el = null;
+            if (node != null)
+            {
+                node = null;
+            }
+            Marshal.ReleaseComObject(elementInformation);
         }
 
         public void paintCustomScrollCorner(WebView WebView, ref _RemotableHandle hDC, tagRECT rect)
@@ -519,7 +539,6 @@ namespace WebKit
         public void webViewSetCursor(WebView sender, int cursor)
         {
             owner.Cursor = new System.Windows.Forms.Cursor((IntPtr)cursor);
-            //NativeMethods.SendMessage(owner.webViewHWND, (uint)0x0020, (IntPtr)cursor, (IntPtr)cursor);
         }
 
         public int webViewShouldInterruptJavaScript(WebView sender)

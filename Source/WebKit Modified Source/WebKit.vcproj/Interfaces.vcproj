@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="Interfaces"
 	ProjectGUID="{91762BE2-87EF-4F5A-A480-48B90EB3F406}"
 	RootNamespace="Interfaces"
@@ -192,6 +192,8 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+				WarnAsError="false"
+				TargetEnvironment="1"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"

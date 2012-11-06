@@ -115,7 +115,7 @@ namespace WebKit
             DidReceiveDataOfLength(download, length);
         }
 
-        public void didReceiveResponse(WebDownload download, WebURLResponse response)
+        public void didReceiveResponse(WebDownload download, IWebURLResponse response)
         {  
             DidReceiveResponse(download, response);
         }
@@ -126,12 +126,12 @@ namespace WebKit
             return 0;
         }
 
-        public void willResumeWithResponse(WebDownload download, WebURLResponse response, long fromByte)
+        public void willResumeWithResponse(WebDownload download, IWebURLResponse response, long fromByte)
         {
             WillResumeWithResponse(download, response, fromByte);
         }
 
-        public void willSendRequest(WebDownload download, WebMutableURLRequest request, WebURLResponse redirectResponse, out WebMutableURLRequest finalRequest)
+        public void willSendRequest(WebDownload download, WebMutableURLRequest request, IWebURLResponse redirectResponse, out WebMutableURLRequest finalRequest)
         {
             finalRequest = request;
         }

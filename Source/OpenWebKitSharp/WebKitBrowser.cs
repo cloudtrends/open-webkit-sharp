@@ -108,6 +108,16 @@ namespace WebKit
         internal CustomUndoSystem undoManager;
         internal GlobalPreferences preferences;
 
+        internal void setCurElSafe(IDOMNode n)
+        {
+            if (_el != null)
+            {
+                Marshal.ReleaseComObject(_el);
+                _el = null;
+            }
+            _el = n;
+            GC.Collect();
+        }
         #region Extended properties
 
         public ContextMenuManager CustomContextMenuManager
@@ -171,7 +181,7 @@ namespace WebKit
             WebView.resetPageZoom(this);
         }
         #endregion
-        internal Element _el;
+        internal IDOMNode _el;
         public Image PageScreenshot
         {
             get
@@ -185,7 +195,31 @@ namespace WebKit
 
         public Element GetCurrentElement()
         {
-            return _el;
+            if (_el != null)
+            {
+                Node nd = Node.Create(_el);
+                if (nd is Element)
+                    return (Element)nd;
+                else
+                    nd.Dispose();
+                return null;
+            }
+            else
+            {
+                tagPOINT point = new tagPOINT() { x = Cursor.Position.X, y = Cursor.Position.Y };
+                CFDictionaryPropertyBag elementinfo = webView.elementAtPoint(point);
+                object el = null;
+                elementinfo.RemoteRead("WebElementDOMNodeKey", out el, null, 0, null);
+                if (el == null)
+                    return null;
+                Marshal.ReleaseComObject(elementinfo);
+                elementinfo = null;
+                Node nd = Element.Create(el as IDOMNode);
+                if (nd is Element)
+                    return (Element)nd;
+                else
+                    return null;
+            }
         }
 
         public WebKitDOMCSSManager CSSManager
@@ -800,6 +834,20 @@ namespace WebKit
             get
             {
                 return DOM.Document.Create(webView.mainFrameDocument());
+            }
+        }
+        /// <summary>
+        /// Gets an HTMLDocument representing the currently displayed page.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DOM.HTMLDocument DocumentAsHTMLDocument
+        {
+            get
+            {
+                if (webView.mainFrameDocument() is IDOMHTMLDocument)
+                    return DOM.HTMLDocument.Create((IDOMHTMLDocument)webView.mainFrameDocument());
+                else
+                    throw new Exception("The current document is not an HTMLDocument");
             }
         }
 
@@ -1623,6 +1671,8 @@ namespace WebKit
 
                 h.Headers = headers.ToArray();
                 HeadersAvailable(this, h);
+                WebRequestObject = null;
+                ResponseObject = null;
             }
             catch { }
         }
@@ -1697,7 +1747,7 @@ namespace WebKit
         [Description("Deactivates the activation context after interference with WebKit COM Types is finished")]
         public static void DeactivateContext()
         {
-            activationContext.Deactivate();
+            activationContext.Deactivate(); 
         }
         #region WebDownloadDelegate event handlers
 

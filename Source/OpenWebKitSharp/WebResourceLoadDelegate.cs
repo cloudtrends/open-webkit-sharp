@@ -88,7 +88,7 @@ namespace WebKit
             catch { }
         }
 
-        public void didReceiveResponse(WebView WebView, uint identifier, WebURLResponse response, IWebDataSource dataSource)
+        public void didReceiveResponse(WebView WebView, uint identifier, IWebURLResponse response, IWebDataSource dataSource)
         {
             ResourceLoading(response);
             resources.Add(identifier, response);

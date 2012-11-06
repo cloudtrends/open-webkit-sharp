@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using WebKit.Interop;
 
@@ -8,7 +9,7 @@ namespace WebKit
     internal class DOMListener : WebKit.DOM.OpenWebKitSharpDOMEvents
     {
         private DOMNode obj;
-
+        private List<Object> todispose = new List<object>();
         internal DOMListener(DOMNode node)
         {
             if (node != null)
@@ -35,9 +36,17 @@ namespace WebKit
 
                 IDOMEventListenerFormouseup mu = new IDOMEventListenerFormouseup(node);
                 mu.Fired += new EventHandler(mu_Fired);
+                todispose.AddRange(new Object[] { mu, md, mo, ku, kd, c, f });
             }
         }
-
+        public void Dispose()
+        {
+            foreach (object o in todispose)
+            {
+                Marshal.Release(Marshal.GetComInterfaceForObject(o, typeof(IDOMEventListener)));
+            }
+            todispose = null;
+        }
         void mu_Fired(object sender, EventArgs e)
         {
             MouseUp(obj, new EventArgs());

@@ -52,7 +52,7 @@ namespace WebKit
     internal delegate void WindowScriptObjectAvailableEvent(WebView WebView, IntPtr context, IntPtr windowScriptObject);
     internal delegate void DidClearWindowObjectEvent(WebView WebView, IntPtr context, IntPtr windowScriptObject, IWebFrame frame);
 
-    internal class WebFrameLoadDelegate : IWebFrameLoadDelegate
+    internal class WebFrameLoadDelegate : IWebFrameLoadDelegate, IWebFrameLoadDelegatePrivate 
     {
         public event DidCancelClientRedirectForFrameEvent DidCancelClientRedirectForFrame = delegate { };
         public event DidChangeLocationWithinPageForFrameEvent DidChangeLocationWithinPageForFrame = delegate { };
@@ -142,5 +142,25 @@ namespace WebKit
         }
 
         #endregion
+
+        public void didFinishDocumentLoadForFrame(WebView sender, webFrame frame)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void didFirstLayoutInFrame(WebView sender, webFrame frame)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void didFirstVisuallyNonEmptyLayoutInFrame(WebView sender, webFrame frame)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void didHandleOnloadEventsForFrame(WebView sender, webFrame frame)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

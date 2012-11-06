@@ -74,6 +74,8 @@ namespace WebKit
         {
             get
             {
+                if (Owner.GetCurrentElement() == null)
+                    return ContextMenuType.Body;
                 if (Owner.CanCopyText)
                 {
                     if (Owner.GetCurrentElement().Type == ElementType.Input)

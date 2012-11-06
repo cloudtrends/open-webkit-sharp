@@ -339,5 +339,6 @@ library WebKit
 	{
 		[default] interface IDOMHTMLElement;
 		interface IDOMHTMLFormElement;
+		interface IDOMHTMLDocument;
 	}
 }

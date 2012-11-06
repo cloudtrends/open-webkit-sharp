@@ -38,14 +38,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>..\..\build\</OutputPath>
-    <WarningLevel>0</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
     <Prefer32Bit>false</Prefer32Bit>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG</DefineConstants>
-    <DebugType>none</DebugType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DebugSymbols>true</DebugSymbols>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -127,8 +129,9 @@
     </Reference>
     <Reference Include="JSCore, Version=1.0.1.2, Culture=neutral, PublicKeyToken=d6b823da6d3fa04b, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\JavaScript\bin\Release\JSCore.dll</HintPath>
+      <HintPath>..\..\Binary\JSCore.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -160,7 +163,7 @@
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
     </Reference>
-    <Reference Include="WebKit.Interop, Version=536.0.0.0, Culture=neutral, PublicKeyToken=e78a9a0f333419fa, processorArchitecture=MSIL">
+    <Reference Include="WebKit.Interop, Version=536.0.0.0, Culture=neutral, PublicKeyToken=22198f6602307c03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\generated\WebKit.Interop.dll</HintPath>
