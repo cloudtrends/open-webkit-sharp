@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using WebKit.JSCore;
 using System.Threading;
 using WebKit.Interop;

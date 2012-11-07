@@ -342,7 +342,16 @@ interface IDOMHTMLFormElement : IDOMHTMLElement
     */
     HRESULT setAction([in] BSTR action);
 
-    
+    /*
+        - (NSString *)enctype;
+    */
+    HRESULT encType([out, retval] BSTR* result);
+
+    /*
+        - (void)setEnctype:(NSString *)enctype;
+    */
+    HRESULT setEnctype([out, retval] BSTR* encType);
+
     /*
         - (NSString *)method;
     */

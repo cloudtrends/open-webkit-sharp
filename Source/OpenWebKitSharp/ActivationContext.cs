@@ -83,8 +83,10 @@ namespace WebKit
                 throw new ObjectDisposedException(this.ToString());
             if (!Initialized)
             {
-                Initialize();
-                Activate();
+                if (Initialize())
+                    Activate();
+                else
+                    Dispose();
             } 
             if (!Activated)
             {
@@ -122,7 +124,7 @@ namespace WebKit
         /// <summary>
         /// Initializes the activation context.
         /// </summary>
-        public void Initialize()
+        public bool Initialize()
         {
             if (disposed)
                 throw new ObjectDisposedException(this.ToString());
@@ -146,8 +148,10 @@ namespace WebKit
                         read.Controls[0].Text = Properties.Resources.How_to_use;
                         read.Text = "How to use.txt";
                         read.Show();
+                        return false;
                     }
             }
+            return true;
         }
 
         #region Garbage collection stuff

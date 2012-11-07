@@ -115,7 +115,7 @@ namespace WebKit
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">A ShowJavaScriptPromptPanelEventArgs that contains the event data.</param>
     public delegate void ShowJavaScriptPromptPanelEventHandler(object sender, ShowJavaScriptPromptPanelEventArgs e);
-
+    public delegate void HTTPErrorEventHandler(object sender, HTTPErrorEventArgs e);
     public delegate void CanGoBackChanged(object sender, CanGoBackChangedEventArgs e);
     public delegate void CanGoForwardChanged(object sender, CanGoForwardChangedEventArgs e);
     public delegate void MouseDidMoveOverElementEventHandler(object sender, MouseDidMoveOverElementEventArgs e);
@@ -124,7 +124,10 @@ namespace WebKit
     #endregion
 
     #region EventArgs classes
-
+    public class HTTPErrorEventArgs : EventArgs
+    {
+        public WebException WebException { get; internal set; }
+    }
     public class GeolocationRequestEventArgs : EventArgs 
     {
         public bool Allow { get; set; }

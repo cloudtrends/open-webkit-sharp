@@ -42,13 +42,9 @@ namespace WebKit
         {
             if (!disposed)
             {
-                try
-                {
-                    Document.Dispose();
-                }
-                catch { }
                 webView.close();
-                Marshal.Release(webViewHWND);
+                Marshal.ReleaseComObject(webView);
+                webViewHWND = System.IntPtr.Zero;
                 if (disposing && (components != null))
                 {
                     components.Dispose();

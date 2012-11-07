@@ -29,9 +29,10 @@
 
 
 // credits to VBCoder for updated favicon code
+// credits to Vincent Richomme for building the modified WebKit build that is used by OpenWebKitSharp 3.0 and newer
 
-// TODO: dispose / finalize stuff
-//       design time support for properties etc..
+// thanks to the guy from the issue 124 (http://code.google.com/p/open-webkit-sharp/issues/detail?id=124)
+// for providing a fix to the printing dialog bugs
 
 using System;
 using System.Collections.Generic;
@@ -426,6 +427,11 @@ namespace WebKit
         /// Occurs when the WebKitBrowser control requests that a download starts.
         /// </summary>
         public event FileDownloadBeginEventHandler DownloadBegin = delegate { };
+
+        /// <summary>
+        /// Occurs when an HTTP error occurs during navigation
+        /// </summary>
+        public event HTTPErrorEventHandler HTTPErrorOccured = delegate { };
 
         /// <summary>
         /// Occurs when a form is submitted.
@@ -1626,7 +1632,13 @@ namespace WebKit
                 if (!string.IsNullOrEmpty(url))
                 {
                     BackgroundWorker bw = new BackgroundWorker();
+                    bw.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs e) { if (e.Result != null && e.Result.GetType().Equals(typeof(WebException)))
+                    {
+                        HTTPErrorOccured(this, new HTTPErrorEventArgs() { WebException = (WebException)e.Result });
+                    }};
+
                     bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+                    
                     HeadersAvailableEventArgs h = new HeadersAvailableEventArgs(new Uri(frame.provisionalDataSource().request().url()), frame.provisionalDataSource().request());
                     bw.RunWorkerAsync(h);
                     string Url = h.Url.ToString();
@@ -1651,7 +1663,8 @@ namespace WebKit
                     }
                 }
             } 
-         }
+         
+        }
         private WebMutableURLRequestClass currentreq { get; set; }
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -1674,7 +1687,10 @@ namespace WebKit
                 WebRequestObject = null;
                 ResponseObject = null;
             }
-            catch { }
+            catch (WebException ex) // thanks to: http://code.google.com/p/open-webkit-sharp/issues/detail?id=146
+            {
+                e.Result = ex;   
+            }
         }
 
         private void frameLoadDelegate_DidFinishLoadForFrame(WebView WebView, IWebFrame frame)
@@ -2187,6 +2203,11 @@ namespace WebKit
             br.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(br_DocumentCompleted);
             br.Tag = "PageSetup";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);
+            br.Visible = false;
+
+            // must be set because of position & size depend on Parent Control's position & size.
+            if (Parent != null)
+                Parent.Controls.Add(br);
             br.Navigate(Application.StartupPath + @"\owstemp.html");
         }
 
@@ -2200,6 +2221,11 @@ namespace WebKit
             br.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(br_DocumentCompleted);
             br.Tag = "PrintDlg";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);
+            br.Visible = false;
+
+            // must be set because of position & size depend on Parent Control's position & size.
+            if (Parent != null)
+                Parent.Controls.Add(br);
             br.Navigate(Application.StartupPath + @"\owstemp.html");
         }
 
@@ -2219,6 +2245,9 @@ namespace WebKit
                 s.Print();
             if (c == "PageSetup")
                 s.ShowPageSetupDialog();
+            if (s.Parent != null)
+                if (s.Controls.Contains(s))
+                    s.Parent.Controls.Remove(s);
             s.Dispose();
             if (File.Exists(Application.StartupPath + @"\owstemp.html"))
                 File.Delete(Application.StartupPath + @"\owstemp.html");
@@ -2235,6 +2264,11 @@ namespace WebKit
             br.Tag = "PrintPreviewDlg";
             System.IO.File.WriteAllText(Application.StartupPath + @"\owstemp.html", DocumentText);
             br.Navigate(Application.StartupPath + @"\owstemp.html");
+            br.Visible = false;
+
+            // must be set because of position & size depend on Parent Control's position & size.
+            if (Parent != null)
+                Parent.Controls.Add(br);
         }
 
         public GlobalPreferences Preferences

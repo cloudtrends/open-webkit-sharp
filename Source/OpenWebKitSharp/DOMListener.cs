@@ -43,8 +43,13 @@ namespace WebKit
         {
             foreach (object o in todispose)
             {
-                Marshal.Release(Marshal.GetComInterfaceForObject(o, typeof(IDOMEventListener)));
+                try
+                {
+                    Marshal.Release(Marshal.GetComInterfaceForObject(o, typeof(IDOMEventListener)));
+                }
+                catch { }
             }
+            todispose.Clear();
             todispose = null;
         }
         void mu_Fired(object sender, EventArgs e)
