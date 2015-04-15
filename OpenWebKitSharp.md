@@ -1,0 +1,8 @@
+# Introduction #
+
+WebKit wrapper for the .NET Platfrom based on the WebKit.NET project
+
+
+# Details #
+
+Based on the WebKit.NET project, OpenWebKitSharp gives more functionality to the webkit.net project by adding more features and fixing some bugs.

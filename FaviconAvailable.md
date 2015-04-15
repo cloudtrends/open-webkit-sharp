@@ -1,0 +1,3 @@
+# Information #
+
+The event that is fired when the favicon of the page changes. It gives the new favicon as an argument.

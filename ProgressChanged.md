@@ -1,0 +1,8 @@
+# Introduction #
+
+This event is fired when the page progress changes
+
+
+# Details #
+
+This event provides arguments about the page loading progress.

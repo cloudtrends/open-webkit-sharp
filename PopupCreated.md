@@ -1,0 +1,8 @@
+# Information #
+
+The event that is fired when a Popup window is created.
+
+
+# Arguments #
+
+**WebKitBrowser**: The WebKitBrowser object that represents the popup window (should be handled the same way like NewWindowCreated)

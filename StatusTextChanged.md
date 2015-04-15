@@ -1,0 +1,9 @@
+# Introduction #
+
+The event that is fired when the status text of the browser changes
+
+
+# Details #
+
+Arguments:
+StatusText: The status text of the browser.

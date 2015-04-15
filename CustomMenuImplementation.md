@@ -1,0 +1,3 @@
+# Details #
+
+This project will guide you through the implementation of your own custom menu. It is fully commented and it describes the steps that you should follow to create your own context menu and override the custom one in your application
